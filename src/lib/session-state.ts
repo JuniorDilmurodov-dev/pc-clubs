@@ -4,7 +4,7 @@
 export interface HomeSession {
   query: string;
   chips: string[];
-  district: string;
+  sort: string | null;
   selectedId: string | null;
   user: { lat: number; lng: number } | null;
 }

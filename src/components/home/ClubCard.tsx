@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { branchTitle, formatPrice, localize, type BranchView } from "@/lib/branches";
 import { formatTravel, travelFromKm, yandexRouteUrl, type TravelDict } from "@/lib/directions";
+import type { CardPrice } from "@/lib/filters";
 import { fmt } from "@/lib/i18n-format";
 import type { HomeDict } from "./types";
 
@@ -11,8 +12,8 @@ function formatDistance(km: number, dict: HomeDict) {
 }
 
 export default function ClubCard({
-  branch: b, lang, dict, travel, distanceKm, selected,
-}: { branch: BranchView; lang: string; dict: HomeDict; travel: TravelDict; distanceKm?: number; selected: boolean }) {
+  branch: b, lang, dict, travel, distanceKm, price, selected,
+}: { branch: BranchView; lang: string; dict: HomeDict; travel: TravelDict; distanceKm?: number; price: CardPrice; selected: boolean }) {
   const [pre, post] = dict.priceFrom.split("{price}");
   const district = localize(b.district, lang);
   const address = [
@@ -58,13 +59,13 @@ export default function ClubCard({
         )}
       </div>
       <div className="flex shrink-0 flex-col items-end justify-center text-right">
-        {b.minPricePerHour === null ? (
+        {price.price === null ? (
           <span className="text-sm text-muted">{dict.noPrice}</span>
         ) : (
           <>
             <span className="text-xs text-muted">{pre.trim()}</span>
-            <span className="text-2xl font-extrabold leading-tight text-accent">{formatPrice(b.minPricePerHour)}</span>
-            <span className="text-xs text-muted">{post.trim()}</span>
+            <span className="text-2xl font-extrabold leading-tight text-accent">{formatPrice(price.price)}</span>
+            <span className="text-xs text-muted">{post.trim()}{price.zoneName ? ` · ${price.zoneName}` : ""}</span>
           </>
         )}
       </div>

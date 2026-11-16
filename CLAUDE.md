@@ -27,10 +27,11 @@ Gamerlar PC club'larni (specs, narx, joylashuv) bir joyda topadi.
 **Tayyor**
 - Tiplar, seed (Bezone Gaming C1 to'liq), 10 ta to'qima demo club (`isDemo`, `SHOW_DEMO` flag).
 - Data-access qatlami + hisoblangan maydonlar + filtrlar; vitest testlari (`npm test`).
-- Bosh sahifa `/[lang]`: xarita (pinlarda narx), filtr chiplari, qidiruv, mobil sheet (vaul), desktop panel, geolokatsiya.
+- Bosh sahifa `/[lang]`: xarita, filtr chiplari, qidiruv, mobil sheet (vaul), desktop panel, geolokatsiya.
 - i18n (uz/ru) va `/[lang]/club/[id]` stub sahifasi.
+- Filtrlar (`src/lib/filters.ts`, sof funksiyalar): chiplar AND — 24/7, Tungi paket, CS2 top, 240Hz+, 500Hz+, PS5. 24/7, Tungi paket, PS5 — club darajasida; CS2 top / 240Hz+ / 500Hz+ — zona darajasida (barcha tanlangan spec filtrlarga BITTA zona mos kelishi kerak). CS2 top = monitor ≥360Hz va `cpuTier(cpu) === "high"` (`src/lib/cpuTier.ts`, qoidalar jadvali; jadvalda yo'q CPU → "unknown", mos kelmaydi). Spec filtr yoqilganda karta narxi = mos zonalar ichidagi eng arzon oddiy narx + zona nomi ("dan 30 000 so'm/soat · Top"). Saralash toggle: Yaqin | Arzon (joylashuv yo'q bo'lsa Yaqin o'chiq, default Arzon). Holat URL'da: `?f=cs2,500hz&sort=price` (URL > sessionStorage). Bo'sh natijada "Filtrlarni tozalash". Eski RTX 40xx/Tuman/Arzon chiplari olib tashlangan (`filterBranches` dagi district/hasRtx40 maydonlari endi UI'da ishlatilmaydi).
 - Club kartasi soddalashtirilgan: nom, 1 qatorli manzil (`<ko'cha> · <tuman>`, truncate), 24/7 belgisi + masofa/vaqt, o'ngda narx. PC soni va specs chiplari olib tashlangan.
-- `minPricePerHour` = `minRegularHourPrice()` (`src/lib/branches.ts`): barcha zonalardagi eng arzon oddiy (timeWindow'siz) 1 soatlik narx; Bezone uchun 20 000 (kunduzgi 15 000 hisobga olinmaydi, u faqat club sahifasida ko'rinadi). Xarita pinlari/filtr/saralash ham shuni ishlatadi.
+- `minPricePerHour` = `minRegularHourPrice()` (`src/lib/branches.ts`): barcha zonalardagi eng arzon oddiy (timeWindow'siz) 1 soatlik narx; Bezone uchun 20 000 (kunduzgi 15 000 hisobga olinmaydi, u faqat club sahifasida ko'rinadi). 
 - 6-qadam: taxminiy yetib borish vaqti (API'siz) — `src/lib/directions.ts`: yo'l = haversine × 1.3; ≤1.5 km piyoda 5 km/soat, aks holda mashinada 25 km/soat.
 
 **Muhim fayllar**

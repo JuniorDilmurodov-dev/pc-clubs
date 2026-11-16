@@ -70,14 +70,19 @@
     "km": "{n} km",
     "m": "{n} m",
     "filters": {
-      "h24": "24/7",
-      "cheap": "Arzon",
-      "rtx40": "RTX 40xx",
-      "hz240": "240Hz+",
+      "24h": "24/7",
       "night": "Tungi paket",
-      "district": "Tuman",
-      "allDistricts": "Barcha tumanlar"
+      "cs2": "CS2 top",
+      "240hz": "240Hz+",
+      "500hz": "500Hz+",
+      "ps5": "PS5"
     },
+    "cs2Hint": "360Hz+ va kuchli CPU",
+    "sortLabel": "Saralash",
+    "sortNear": "Yaqin",
+    "sortPrice": "Arzon",
+    "sortNearDisabled": "Yaqin saralash uchun joylashuvni yoqing",
+    "clearFilters": "Filtrlarni tozalash",
     "directions": "Yo'nalish",
     "directionsLabel": "{name} — yo'nalish (Yandex Xarita)"
   },

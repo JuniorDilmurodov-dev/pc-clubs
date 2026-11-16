@@ -3,7 +3,11 @@
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { Drawer } from "vaul";
-import { distanceKm, filterBranches, localize, type BranchFilters, type BranchView } from "@/lib/branches";
+import { distanceKm, filterBranches, type BranchView } from "@/lib/branches";
+import {
+  applyFilters, cardPrice, parseFilters, parseSort, serializeFilters, sortBranches,
+  type CardPrice, type FilterKey, type SortKey,
+} from "@/lib/filters";
 import type { TravelDict } from "@/lib/directions";
 import { fmt } from "@/lib/i18n-format";
 import { readHomeSession, writeHomeSession } from "@/lib/session-state";
@@ -12,14 +16,14 @@ import BranchList from "./BranchList";
 import FilterChips from "./FilterChips";
 import LangSwitcher from "./LangSwitcher";
 import SearchBar from "./SearchBar";
-import type { ChipKey, HomeDict } from "./types";
+import SortToggle from "./SortToggle";
+import type { HomeDict } from "./types";
 
 const ClubMap = dynamic(() => import("./ClubMap"), {
   ssr: false,
   loading: () => <div className="size-full bg-background" />,
 });
 
-const CHIP_KEYS: ChipKey[] = ["h24", "cheap", "rtx40", "hz240", "night"];
 const SNAPS = ["150px", 0.5, 1] as const;
 
 const desktopQuery = "(min-width: 1024px)";
@@ -39,8 +43,8 @@ export default function HomeView({
   lang, dict, travel, branches,
 }: { lang: Locale; dict: HomeDict; travel: TravelDict; branches: BranchView[] }) {
   const [query, setQuery] = useState("");
-  const [active, setActive] = useState<Set<ChipKey>>(new Set());
-  const [district, setDistrict] = useState("");
+  const [active, setActive] = useState<Set<FilterKey>>(new Set());
+  const [sortChoice, setSortChoice] = useState<SortKey | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [user, setUser] = useState<{ lat: number; lng: number } | null>(null);
   const [locateKey, setLocateKey] = useState(0);
@@ -48,16 +52,23 @@ export default function HomeView({
   const isDesktop = useIsDesktop();
   const [restored, setRestored] = useState(false);
 
-  // Club sahifasidan qaytganda filtrlar va joylashuv tiklanadi (SSR bilan mos kelishi uchun effect'da)
+  // Boshlang'ich holat: URL (?f=cs2,500hz&sort=price) birinchi, so'ng club sahifasidan qaytganda sessionStorage.
+  // SSR bilan mos kelishi uchun effect'da o'qiladi.
   useEffect(() => {
     const s = readHomeSession();
+    const url = new URLSearchParams(window.location.search);
     /* eslint-disable react-hooks/set-state-in-effect */
     if (s) {
       if (typeof s.query === "string") setQuery(s.query);
-      if (Array.isArray(s.chips)) setActive(new Set(s.chips.filter((c): c is ChipKey => CHIP_KEYS.includes(c as ChipKey))));
-      if (typeof s.district === "string") setDistrict(s.district);
       if (s.selectedId) setSelectedId(s.selectedId);
       if (s.user) setUser(s.user);
+    }
+    if (url.has("f") || url.has("sort")) {
+      setActive(new Set(parseFilters(url.get("f"))));
+      setSortChoice(parseSort(url.get("sort")));
+    } else if (s) {
+      if (Array.isArray(s.chips)) setActive(new Set(parseFilters(s.chips.join(","))));
+      setSortChoice(parseSort(s.sort));
     }
     setRestored(true);
     /* eslint-enable react-hooks/set-state-in-effect */
@@ -65,48 +76,47 @@ export default function HomeView({
 
   useEffect(() => {
     if (!restored) return;
-    writeHomeSession({ query, chips: [...active], district, selectedId, user });
-  }, [restored, query, active, district, selectedId, user]);
+    writeHomeSession({ query, chips: [...active], sort: sortChoice, selectedId, user });
+  }, [restored, query, active, sortChoice, selectedId, user]);
 
-  const districts = useMemo(
-    () => {
-      const m = new Map<string, string>();
-      for (const b of branches) if (b.district.uz) m.set(b.district.uz, localize(b.district, lang));
-      return [...m].map(([value, label]) => ({ value, label })).sort((a, b) => a.label.localeCompare(b.label, lang));
-    },
-    [branches, lang],
-  );
+  // Filtr holati URL'da: havolani ulashsa bo'ladi
+  useEffect(() => {
+    if (!restored) return;
+    const url = new URL(window.location.href);
+    const f = serializeFilters(active);
+    if (f) url.searchParams.set("f", f); else url.searchParams.delete("f");
+    if (sortChoice) url.searchParams.set("sort", sortChoice); else url.searchParams.delete("sort");
+    const href = url.href.replace(/%2C/gi, ","); // "?f=cs2,500hz" — vergul o'qiladigan holda
+    if (href !== window.location.href) window.history.replaceState(window.history.state, "", href);
+  }, [restored, active, sortChoice]);
 
-  const toggle = (k: ChipKey) =>
+  const toggle = (k: FilterKey) =>
     setActive((prev) => {
       const next = new Set(prev);
       if (next.has(k)) next.delete(k); else next.add(k);
       return next;
     });
 
-  const { list, distances } = useMemo(() => {
-    const f: BranchFilters = {
-      query,
-      district: district || undefined,
-      is24_7: active.has("h24") || undefined,
-      hasRtx40: active.has("rtx40") || undefined,
-      minHz: active.has("hz240") ? 240 : undefined,
-      hasNightPackage: active.has("night") || undefined,
-      sortBy: active.has("cheap") ? "price" : undefined,
-    };
-    const filtered = filterBranches(branches, f);
+  // Joylashuv bo'lmasa "Yaqin" o'chirilgan va saralash "Arzon"; bor bo'lsa default "Yaqin"
+  const sort: SortKey = user ? (sortChoice ?? "near") : "price";
+
+  const { list, distances, prices } = useMemo(() => {
+    const filtered = applyFilters(filterBranches(branches, { query }), active);
     const distances = new Map<string, number>();
     if (user) {
       for (const b of filtered) {
         if (b.lat !== null && b.lng !== null) distances.set(b.id, distanceKm(user, { lat: b.lat, lng: b.lng }));
       }
-      // "Arzon" yoqilgan bo'lsa narx bo'yicha tartib saqlanadi, aks holda masofa bo'yicha
-      if (!active.has("cheap")) {
-        filtered.sort((a, b) => (distances.get(a.id) ?? Infinity) - (distances.get(b.id) ?? Infinity));
-      }
     }
-    return { list: filtered, distances };
-  }, [branches, query, district, active, user]);
+    const prices = new Map<string, CardPrice>(filtered.map((b) => [b.id, cardPrice(b, active)]));
+    return { list: sortBranches(filtered, sort, distances, prices), distances, prices };
+  }, [branches, query, active, user, sort]);
+
+  const canClear = active.size > 0 || query.trim() !== "";
+  const clearFilters = () => {
+    setActive(new Set());
+    setQuery("");
+  };
 
   const select = useCallback((id: string) => {
     setSelectedId(id);
@@ -137,11 +147,18 @@ export default function HomeView({
   };
 
   const count = fmt(dict.clubsCount, { n: list.length });
-  const chips = (
-    <FilterChips dict={dict} active={active} onToggle={toggle} districts={districts} district={district} onDistrict={setDistrict} />
+  const chips = <FilterChips dict={dict} active={active} onToggle={toggle} />;
+  const listHeader = (
+    <div className="flex items-center justify-between gap-3 px-4 py-2">
+      <p className="text-sm font-semibold text-muted">{count}</p>
+      <SortToggle dict={dict} value={sort} nearEnabled={user !== null} onChange={setSortChoice} />
+    </div>
   );
   const listEl = (
-    <BranchList branches={list} lang={lang} dict={dict} travel={travel} distances={distances} selectedId={selectedId} />
+    <BranchList
+      branches={list} lang={lang} dict={dict} travel={travel} distances={distances} prices={prices}
+      selectedId={selectedId} onClear={canClear ? clearFilters : undefined}
+    />
   );
   const searchRow = (
     <div className="flex gap-2">
@@ -179,7 +196,7 @@ export default function HomeView({
       <aside className="absolute inset-y-0 left-0 z-[1100] hidden w-[420px] flex-col border-r border-line bg-background lg:flex">
         <div className="p-3">{searchRow}</div>
         {chips}
-        <p className="px-4 py-3 text-sm font-semibold text-muted">{count}</p>
+        {listHeader}
         <div className="min-h-0 flex-1 overflow-y-auto">{listEl}</div>
       </aside>
 
@@ -201,7 +218,7 @@ export default function HomeView({
               <Drawer.Description className="sr-only">{count}</Drawer.Description>
               <Drawer.Handle className="!my-2 !w-12 !bg-line" />
               {chips}
-              <p className="px-4 py-2 text-sm font-semibold text-muted">{count}</p>
+              {listHeader}
               <div className={`min-h-0 flex-1 pb-[env(safe-area-inset-bottom)] ${snap === 1 ? "overflow-y-auto" : "overflow-hidden"}`}>
                 {listEl}
               </div>
