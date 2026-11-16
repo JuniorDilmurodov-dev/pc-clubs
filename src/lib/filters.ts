@@ -61,20 +61,36 @@ export interface CardPrice {
   price: number | null;
   /** Spec filtr yoqilgan bo'lsa — eng arzon mos zona nomi, aks holda null */
   zoneName: string | null;
+  /** Spec filtr yoqilgan bo'lsa — karta ko'rsatgan zona id'si (club sahifasida shu tab ochiladi), aks holda null */
+  zoneId: string | null;
 }
 
 /**
  * Karta narxi. Spec filtr yo'q: club bo'yicha eng arzon oddiy soatbay narx (minPricePerHour).
- * Spec filtr bor: mos zonalar ichidagi eng arzon oddiy soatbay narx va shu zona nomi.
+ * Spec filtr bor: mos zonalar ichidagi eng arzon oddiy soatbay narx va shu zona.
  */
 export function cardPrice(b: BranchView, active: Active): CardPrice {
-  if (![...active].some(isSpecKey)) return { price: b.minPricePerHour, zoneName: null };
-  let best: CardPrice = { price: null, zoneName: null };
-  for (const z of matchingZones(b, active)) {
+  if (![...active].some(isSpecKey)) return { price: b.minPricePerHour, zoneName: null, zoneId: null };
+  const zones = matchingZones(b, active);
+  let best: CardPrice = { price: null, zoneName: null, zoneId: zones[0]?.id ?? null };
+  for (const z of zones) {
     const p = minRegularHourPrice(z.prices);
-    if (p !== null && (best.price === null || p < best.price)) best = { price: p, zoneName: z.name };
+    if (p !== null && (best.price === null || p < best.price)) best = { price: p, zoneName: z.name, zoneId: z.id };
   }
   return best;
+}
+
+/** Club sahifasi havolasi. Spec filtr yoqilgan bo'lsa `?zone=<zoneId>` qo'shiladi, aks holda yo'q. */
+export const clubHref = (lang: string, branchId: string, price: Pick<CardPrice, "zoneId">) =>
+  `/${lang}/club/${branchId}${price.zoneId ? `?zone=${encodeURIComponent(price.zoneId)}` : ""}`;
+
+/** Bosh sahifa havolasi filtr holati bilan: `/uz?f=cs2,500hz&sort=price`. */
+export function homeHref(lang: string, active: Active, sort: SortKey | null): string {
+  const q = [
+    active.size ? `f=${serializeFilters(active)}` : "",
+    sort ? `sort=${sort}` : "",
+  ].filter(Boolean).join("&");
+  return `/${lang}${q ? `?${q}` : ""}`;
 }
 
 /** Saralash: "near" — masofa bo'yicha (masofasizlar oxirida), "price" — ko'rsatiladigan narx bo'yicha (narxsizlar oxirida). */

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import BackLink from "./BackLink";
 import { BackIcon, GamepadIcon } from "./Icons";
 import type { ClubDict } from "./types";
 
@@ -28,14 +28,14 @@ export default function ClubHero({ lang, dict, isDemo }: { lang: string; dict: C
         <GamepadIcon className="size-14 text-accent" />
         <span className="text-sm">{dict.imagePlaceholder}</span>
       </div>
-      <Link
-        href={`/${lang}`}
-        aria-label={dict.back}
+      <BackLink
+        lang={lang}
+        label={dict.back}
         className="absolute left-3 top-3 flex h-11 items-center gap-1 rounded-full border border-line bg-background/80 pl-2 pr-4 text-sm font-semibold backdrop-blur active:bg-surface-2"
       >
         <BackIcon className="size-5" />
         {dict.back}
-      </Link>
+      </BackLink>
       {isDemo && (
         <span className="absolute right-3 top-3 rounded-md bg-surface-2 px-2 py-1 text-xs font-semibold uppercase text-foreground ring-1 ring-line">
           {dict.demo}

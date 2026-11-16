@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { branchTitle, formatPrice, localize, type BranchView } from "@/lib/branches";
 import { formatTravel, travelFromKm, yandexRouteUrl, type TravelDict } from "@/lib/directions";
-import type { CardPrice } from "@/lib/filters";
+import { clubHref, type CardPrice } from "@/lib/filters";
 import { fmt } from "@/lib/i18n-format";
 import type { HomeDict } from "./types";
 
@@ -33,7 +33,7 @@ export default function ClubCard({
       }`}
     >
     <Link
-      href={`/${lang}/club/${b.id}`}
+      href={clubHref(lang, b.id, price)}
       aria-current={selected ? "true" : undefined}
       className="flex min-w-0 flex-1 items-stretch justify-between gap-3 p-4 active:bg-surface-2"
     >

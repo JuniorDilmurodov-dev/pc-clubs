@@ -30,7 +30,7 @@ export default function BranchList({
         <li key={b.id}>
           <ClubCard
             branch={b} lang={lang} dict={dict} travel={travel}
-            distanceKm={distances.get(b.id)} price={prices.get(b.id) ?? { price: b.minPricePerHour, zoneName: null }}
+            distanceKm={distances.get(b.id)} price={prices.get(b.id) ?? { price: b.minPricePerHour, zoneName: null, zoneId: null }}
             selected={b.id === selectedId}
           />
         </li>

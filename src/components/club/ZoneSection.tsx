@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 import { bestPriceIndex, formatPrice, isNightPrice, zoneMinPrice } from "@/lib/branches";
 import { fmt } from "@/lib/i18n-format";
 import type { Price, Zone } from "@/types/club";
@@ -35,6 +35,15 @@ export default function ZoneSection({
 }: { zones: ZoneView[]; dict: ClubDict; specLabels: SpecLabels; currency: string }) {
   const [activeId, setActiveId] = useState(zones[0]?.id);
   const uid = useId();
+
+  // ?zone=<zoneId> bo'lsa shu tab ochiladi va ko'rinadigan joyga scroll qilinadi. Noto'g'ri id — birinchi tab.
+  useEffect(() => {
+    const zid = new URLSearchParams(window.location.search).get("zone");
+    if (!zid || !zones.some((z) => z.id === zid)) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setActiveId(zid);
+    document.getElementById(`${uid}-tab-${zid}`)?.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+  }, [zones, uid]);
   const zone = zones.find((z) => z.id === activeId) ?? zones[0];
   if (!zone) return <p className="text-muted">{dict.noZones}</p>;
 

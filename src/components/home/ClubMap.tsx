@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import L from "leaflet";
 import { AttributionControl, MapContainer, Marker, TileLayer, ZoomControl, useMap } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
@@ -67,7 +67,7 @@ function Controller({ branches, selectedId, user, locateKey }: {
   return null;
 }
 
-export default function ClubMap({
+function ClubMapInner({
   branches, selectedId, onSelect, user, locateKey, label,
 }: {
   branches: BranchView[]; selectedId: string | null; onSelect: (id: string) => void;
@@ -131,4 +131,22 @@ export default function ClubMap({
       {user && <Marker position={[user.lat, user.lng]} icon={userIcon} interactive={false} />}
     </MapContainer>
   );
+}
+
+type ClubMapProps = Parameters<typeof ClubMapInner>[0];
+
+/**
+ * Cache Components marshrutni <Activity hidden> da saqlaydi: boshqa sahifaga o'tganda effect'lar tozalanadi
+ * (Leaflet xaritasi remove() qilinadi), qaytganda esa qayta ishga tushadi — o'chirilgan xaritada layer qo'shishga urinib
+ * "appendChild of undefined" xatosi chiqadi. Shuning uchun xarita faqat effect'lar faol bo'lganda mount bo'ladi:
+ * yashirilganda unmount, ko'rsatilganda yangidan quriladi.
+ */
+export default function ClubMap(props: ClubMapProps) {
+  const [active, setActive] = useState(false);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setActive(true);
+    return () => setActive(false);
+  }, []);
+  return active ? <ClubMapInner {...props} /> : <div className="size-full bg-background" />;
 }
