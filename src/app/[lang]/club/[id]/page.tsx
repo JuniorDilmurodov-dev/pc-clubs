@@ -10,7 +10,7 @@ import ZoneSection from "@/components/club/ZoneSection";
 import { FEEDBACK_TELEGRAM } from "@/config";
 import { hasLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
-import { branchTitle, formatDate, formatPrice, telegramUrl, telHref } from "@/lib/branches";
+import { branchTitle, formatDate, formatPrice, localize, telegramUrl, telHref } from "@/lib/branches";
 import { getBranchById, getBranches } from "@/lib/data";
 import { googleRouteUrl, yandexRouteUrl } from "@/lib/directions";
 import { fmt } from "@/lib/i18n-format";
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/club/[id]"
   if (!b) return {};
 
   const name = branchTitle(b);
-  const place = b.district || dict.common.city;
+  const place = localize(b.district, lang) || dict.common.city;
   const c = dict.club;
   const description = [
     fmt(c.metaDescBase, { name, place }),
@@ -58,7 +58,7 @@ export default async function ClubPage({ params }: PageProps<"/[lang]/club/[id]"
   const c = dict.club;
   const hours = branch.is24_7 ? dict.common.open24h : branch.hours || null;
   const hasCoords = branch.lat !== null && branch.lng !== null;
-  const place = [branch.district, branch.address].filter(Boolean).join(" · ");
+  const place = [localize(branch.district, lang), localize(branch.address, lang)].filter(Boolean).join(" · ");
 
   return (
     <div className="mx-auto w-full max-w-2xl pb-32">

@@ -14,7 +14,7 @@ export default function FilterChips({
   dict: HomeDict;
   active: Set<ChipKey>;
   onToggle: (k: ChipKey) => void;
-  districts: string[];
+  districts: { value: string; label: string }[];
   district: string;
   onDistrict: (d: string) => void;
 }) {
@@ -26,7 +26,7 @@ export default function FilterChips({
         </button>
       ))}
       <label className={`${base} ${district ? on : off}`}>
-        <span>{district || dict.filters.district}</span>
+        <span>{districts.find((d) => d.value === district)?.label ?? dict.filters.district}</span>
         <svg aria-hidden viewBox="0 0 24 24" className="ml-1 size-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="m6 9 6 6 6-6" /></svg>
         <select
           value={district}
@@ -35,7 +35,7 @@ export default function FilterChips({
           className="absolute inset-0 size-full cursor-pointer opacity-0"
         >
           <option value="">{dict.filters.allDistricts}</option>
-          {districts.map((d) => <option key={d} value={d}>{d}</option>)}
+          {districts.map((d) => <option key={d.value} value={d.value}>{d.label}</option>)}
         </select>
       </label>
     </div>

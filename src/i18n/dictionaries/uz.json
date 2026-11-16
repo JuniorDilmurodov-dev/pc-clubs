@@ -62,6 +62,7 @@
     "filtersLabel": "Filtrlar",
     "demo": "Demo",
     "open24h": "24/7",
+    "districtFmt": "{name} tumani",
     "pcCount": "{n} PC",
     "pcCountApprox": "~{n} PC",
     "priceFrom": "dan {price} so'm/soat",

@@ -1,4 +1,4 @@
-import type { Branch, Brand, PaymentMethod, Price, Zone } from "@/types/club";
+import type { Branch, Localized, Brand, PaymentMethod, Price, Zone } from "@/types/club";
 
 // TO'QIMA DEMO MA'LUMOT — haqiqiy club'lar emas. Nomlar, narxlar va specs o'ylab topilgan.
 // Koordinatalar tuman markazi atrofidagi taxminiy nuqtalar. config.ts dagi SHOW_DEMO bilan o'chiriladi.
@@ -20,8 +20,8 @@ interface DemoZone {
 interface DemoClub {
   slug: string;
   name: string;
-  district: string;
-  address: string;
+  district: Localized;
+  address: Localized;
   lat: number;
   lng: number;
   is24_7: boolean;
@@ -34,7 +34,7 @@ const NIGHT = "00:00–08:00";
 
 const defs: DemoClub[] = [
   {
-    slug: "arena", name: "Demo Arena", district: "Chilonzor", address: "Demo ko'cha, 1",
+    slug: "arena", name: "Demo Arena", district: { uz: "Chilonzor", ru: "Чиланзарский" }, address: { uz: "Demo ko'cha, 1", ru: "Демо ул., 1" },
     lat: 41.2755, lng: 69.2035, is24_7: true, payments: ["cash", "card", "click"], hasBar: true,
     zones: [
       { name: "Standart", count: 40, cpu: "Intel Core i5-10400F", gpu: "GTX 1660 Super", monitors: "24\" 144Hz", hz: 144, keyboard: "Redragon K552", mouse: "Logitech G102", headset: "HyperX Cloud Stinger", prices: [[1, 12000], [3, 30000], [8, 70000, NIGHT]] },
@@ -42,14 +42,14 @@ const defs: DemoClub[] = [
     ],
   },
   {
-    slug: "cyber", name: "Demo Cyber", district: "Yunusobod", address: "Demo mavze, 5",
+    slug: "cyber", name: "Demo Cyber", district: { uz: "Yunusobod", ru: "Юнусабадский" }, address: { uz: "Demo mavze, 5", ru: "Демо кв-л, 5" },
     lat: 41.3655, lng: 69.2845, is24_7: false, payments: ["cash", "payme"], hasBar: false,
     zones: [
       { name: "Start", count: 30, cpu: "Ryzen 5 3600", gpu: "GTX 1660", monitors: "24\" 144Hz", hz: 144, keyboard: "A4Tech Bloody B120", mouse: "A4Tech Bloody V8", headset: "Havit H2002d", prices: [[1, 10000], [3, 27000], [5, 42000]] },
     ],
   },
   {
-    slug: "pixel", name: "Demo Pixel", district: "Yakkasaroy", address: "Demo ko'cha, 12",
+    slug: "pixel", name: "Demo Pixel", district: { uz: "Yakkasaroy", ru: "Яккасарайский" }, address: { uz: "Demo ko'cha, 12", ru: "Демо ул., 12" },
     lat: 41.2905, lng: 69.2645, is24_7: true, payments: ["cash", "card", "click", "payme"], hasBar: true,
     zones: [
       { name: "Mid", count: 25, cpu: "Intel Core i5-12400F", gpu: "RTX 3060 Ti", monitors: "27\" 180Hz", hz: 180, keyboard: "Logitech G413", mouse: "Logitech G203", headset: "Logitech G335", prices: [[1, 18000], [3, 48000], [8, 90000, NIGHT]] },
@@ -57,14 +57,14 @@ const defs: DemoClub[] = [
     ],
   },
   {
-    slug: "zone", name: "Demo Zone", district: "Sergeli", address: "Demo ko'cha, 7",
+    slug: "zone", name: "Demo Zone", district: { uz: "Sergeli", ru: "Сергелийский" }, address: { uz: "Demo ko'cha, 7", ru: "Демо ул., 7" },
     lat: 41.2255, lng: 69.2195, is24_7: false, payments: ["cash"], hasBar: false,
     zones: [
       { name: "Standart", count: 35, cpu: "Intel Core i3-12100F", gpu: "GTX 1650", monitors: "24\" 144Hz", hz: 144, keyboard: "Defender Mech", mouse: "Defender Shock", headset: "Defender Warhead", prices: [[1, 10000], [3, 26000], [5, 40000]] },
     ],
   },
   {
-    slug: "hub", name: "Demo Hub", district: "Mirobod", address: "Demo ko'cha, 3",
+    slug: "hub", name: "Demo Hub", district: { uz: "Mirobod", ru: "Мирабадский" }, address: { uz: "Demo ko'cha, 3", ru: "Демо ул., 3" },
     lat: 41.2975, lng: 69.2795, is24_7: true, payments: ["cash", "card", "payme"], hasBar: true,
     zones: [
       { name: "Gamer", count: 28, cpu: "Ryzen 5 5600", gpu: "RTX 3060", monitors: "27\" 165Hz", hz: 165, keyboard: "SteelSeries Apex 3", mouse: "SteelSeries Rival 3", headset: "SteelSeries Arctis 1", prices: [[1, 16000], [3, 42000], [8, 80000, NIGHT]] },
@@ -72,21 +72,21 @@ const defs: DemoClub[] = [
     ],
   },
   {
-    slug: "base", name: "Demo Base", district: "Shayxontohur", address: "Demo ko'cha, 9",
+    slug: "base", name: "Demo Base", district: { uz: "Shayxontohur", ru: "Шайхантахурский" }, address: { uz: "Demo ko'cha, 9", ru: "Демо ул., 9" },
     lat: 41.3205, lng: 69.2395, is24_7: false, payments: ["cash", "card"], hasBar: false,
     zones: [
       { name: "Mid", count: 22, cpu: "Intel Core i5-11400F", gpu: "RTX 3050", monitors: "24\" 165Hz", hz: 165, keyboard: "Redragon K630", mouse: "Redragon M601", headset: "Redragon H120", prices: [[1, 13000], [3, 34000], [5, 52000]] },
     ],
   },
   {
-    slug: "spot", name: "Demo Spot", district: "Uchtepa", address: "Demo ko'cha, 21",
+    slug: "spot", name: "Demo Spot", district: { uz: "Uchtepa", ru: "Учтепинский" }, address: { uz: "Demo ko'cha, 21", ru: "Демо ул., 21" },
     lat: 41.2895, lng: 69.1655, is24_7: true, payments: ["cash", "click"], hasBar: false,
     zones: [
       { name: "Standart", count: 45, cpu: "Ryzen 5 3600", gpu: "GTX 1660 Super", monitors: "24\" 144Hz", hz: 144, keyboard: "Redragon K552", mouse: "Logitech G102", headset: "Havit H2002d", prices: [[1, 11000], [3, 28000], [8, 60000, NIGHT]] },
     ],
   },
   {
-    slug: "point", name: "Demo Point", district: "Olmazor", address: "Demo ko'cha, 14",
+    slug: "point", name: "Demo Point", district: { uz: "Olmazor", ru: "Алмазарский" }, address: { uz: "Demo ko'cha, 14", ru: "Демо ул., 14" },
     lat: 41.3455, lng: 69.2295, is24_7: false, payments: ["cash", "card", "click", "payme"], hasBar: true,
     zones: [
       { name: "Mid", count: 30, cpu: "Intel Core i5-12400F", gpu: "RTX 4060", monitors: "27\" 240Hz", hz: 240, keyboard: "Logitech G413", mouse: "Logitech G305", headset: "Logitech G435", prices: [[1, 19000], [3, 50000], [5, 78000]] },
@@ -94,7 +94,7 @@ const defs: DemoClub[] = [
     ],
   },
   {
-    slug: "nest", name: "Demo Nest", district: "Yashnobod", address: "Demo ko'cha, 30",
+    slug: "nest", name: "Demo Nest", district: { uz: "Yashnobod", ru: "Яшнабадский" }, address: { uz: "Demo ko'cha, 30", ru: "Демо ул., 30" },
     lat: 41.3005, lng: 69.3295, is24_7: true, payments: ["cash", "payme"], hasBar: false,
     zones: [
       { name: "Start", count: 26, cpu: "Intel Core i5-10400F", gpu: "GTX 1660 Ti", monitors: "24\" 144Hz", hz: 144, keyboard: "A4Tech Bloody B120", mouse: "A4Tech Bloody V8", headset: "Havit H2002d", prices: [[1, 11000], [3, 29000], [8, 65000, NIGHT]] },
@@ -102,7 +102,7 @@ const defs: DemoClub[] = [
     ],
   },
   {
-    slug: "garage", name: "Demo Garage", district: "Bektemir", address: "Demo ko'cha, 2",
+    slug: "garage", name: "Demo Garage", district: { uz: "Bektemir", ru: "Бектемирский" }, address: { uz: "Demo ko'cha, 2", ru: "Демо ул., 2" },
     lat: 41.2105, lng: 69.3345, is24_7: false, payments: ["cash"], hasBar: false,
     zones: [
       { name: "Standart", count: 20, cpu: "Intel Core i3-12100F", gpu: "GTX 1650", monitors: "24\" 144Hz", hz: 144, keyboard: "Defender Mech", mouse: "Defender Shock", headset: "Defender Warhead", prices: [[1, 10000], [3, 25000], [5, 38000]] },

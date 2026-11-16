@@ -5,7 +5,7 @@ describe("hisoblangan maydonlar — Bezone C1", () => {
   it("minPricePerHour, maxHz, bestGpu, totalPcCount", async () => {
     const b = await getBranchById("bezone-c1");
     expect(b).not.toBeNull();
-    expect(b!.minPricePerHour).toBe(15000);
+    expect(b!.minPricePerHour).toBe(20000); // 15 000 lik kunduzgi narx hisobga olinmaydi
     expect(b!.maxHz).toBe(540);
     expect(b!.bestGpu).toBe("RTX 4070 Ti SUPER");
     expect(b!.totalPcCount).toBe(110);

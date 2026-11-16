@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { branchTitle, formatPrice, type BranchView } from "@/lib/branches";
+import { branchTitle, formatPrice, localize, type BranchView } from "@/lib/branches";
 import { formatTravel, travelFromKm, yandexRouteUrl, type TravelDict } from "@/lib/directions";
 import { fmt } from "@/lib/i18n-format";
 import type { HomeDict } from "./types";
@@ -14,14 +14,15 @@ export default function ClubCard({
   branch: b, lang, dict, travel, distanceKm, selected,
 }: { branch: BranchView; lang: string; dict: HomeDict; travel: TravelDict; distanceKm?: number; selected: boolean }) {
   const [pre, post] = dict.priceFrom.split("{price}");
-  const meta = [
-    distanceKm !== undefined
-      ? `${formatDistance(distanceKm, dict)} · ${formatTravel(travelFromKm(distanceKm), travel)}`
-      : null,
-    b.district || null,
-    b.is24_7 ? dict.open24h : null,
-    b.totalPcCount > 0 ? fmt(b.totalPcCountApprox ? dict.pcCountApprox : dict.pcCount, { n: b.totalPcCount }) : null,
-  ].filter(Boolean);
+  const district = localize(b.district, lang);
+  const address = [
+    localize(b.address, lang),
+    district ? fmt(dict.districtFmt, { name: district }) : "",
+  ].filter(Boolean).join(" · ");
+  const distance = distanceKm !== undefined
+    ? `${formatDistance(distanceKm, dict)} · ${formatTravel(travelFromKm(distanceKm), travel)}`
+    : null;
+  const showMeta = b.is24_7 || distance !== null;
 
   return (
     <div
@@ -44,11 +45,17 @@ export default function ClubCard({
             </span>
           )}
         </div>
-        <p className="mt-1 text-sm text-muted">{meta.join(" · ")}</p>
-        <div className="mt-2 flex flex-wrap gap-1.5 text-xs font-semibold">
-          {b.bestGpu && <span className="rounded-md bg-surface-2 px-2 py-1 ring-1 ring-line">{b.bestGpu}</span>}
-          {b.maxHz && <span className="rounded-md bg-surface-2 px-2 py-1 ring-1 ring-line">{b.maxHz} Hz</span>}
-        </div>
+        {address && <p className="mt-1 truncate text-sm text-muted">{address}</p>}
+        {showMeta && (
+          <p className="mt-1 flex items-center gap-2 text-sm text-muted">
+            {b.is24_7 && (
+              <span className="shrink-0 rounded bg-surface-2 px-1.5 py-0.5 text-xs font-bold text-foreground ring-1 ring-line">
+                {dict.open24h}
+              </span>
+            )}
+            {distance && <span className="min-w-0 truncate">{distance}</span>}
+          </p>
+        )}
       </div>
       <div className="flex shrink-0 flex-col items-end justify-center text-right">
         {b.minPricePerHour === null ? (

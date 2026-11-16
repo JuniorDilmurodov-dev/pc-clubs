@@ -7,7 +7,7 @@ import {
   demoBranches, demoBrands, demoPrices, demoZones,
 } from "@/data/demo-clubs";
 import {
-  filterBranches, isNightPrice, RTX_40_RE,
+  filterBranches, isNightPrice, minRegularHourPrice, RTX_40_RE,
   type BranchFilters, type BranchView,
 } from "@/lib/branches";
 import type { Branch, Brand } from "@/types/club";
@@ -40,13 +40,6 @@ function build(branch: Branch): BranchView {
     .map((z) => ({ ...z, prices: prices.filter((p) => p.zoneId === z.id) }));
 
   const pcZones = zones.filter((z) => z.type === "pc");
-  // Soatlik narx: 1 soatlik tariflar orasida eng arzoni; yo'q bo'lsa paketlar narx/soat bo'yicha
-  const all = (pcZones.length ? pcZones : zones).flatMap((z) => z.prices);
-  const oneHour = all.filter((p) => p.hours === 1).map((p) => p.price);
-  const perHour = oneHour.length
-    ? oneHour
-    : all.filter((p) => p.hours > 0).map((p) => Math.round(p.price / p.hours));
-
   const gpus = pcZones.map((z) => z.gpu).filter(Boolean);
   const bestGpu = gpus.reduce<string | null>(
     (best, g) => (best === null || gpuRank(g) > gpuRank(best) ? g : best),
@@ -59,7 +52,7 @@ function build(branch: Branch): BranchView {
     ...branch,
     brand,
     zones,
-    minPricePerHour: perHour.length ? Math.min(...perHour) : null,
+    minPricePerHour: minRegularHourPrice(zones.flatMap((z) => z.prices)),
     bestGpu,
     maxHz: hz.length ? Math.max(...hz) : null,
     totalPcCount: pcZones.reduce((sum, z) => sum + (z.pcCount ?? 0), 0),

@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { Drawer } from "vaul";
-import { distanceKm, filterBranches, type BranchFilters, type BranchView } from "@/lib/branches";
+import { distanceKm, filterBranches, localize, type BranchFilters, type BranchView } from "@/lib/branches";
 import type { TravelDict } from "@/lib/directions";
 import { fmt } from "@/lib/i18n-format";
 import { readHomeSession, writeHomeSession } from "@/lib/session-state";
@@ -69,8 +69,12 @@ export default function HomeView({
   }, [restored, query, active, district, selectedId, user]);
 
   const districts = useMemo(
-    () => [...new Set(branches.map((b) => b.district).filter(Boolean))].sort(),
-    [branches],
+    () => {
+      const m = new Map<string, string>();
+      for (const b of branches) if (b.district.uz) m.set(b.district.uz, localize(b.district, lang));
+      return [...m].map(([value, label]) => ({ value, label })).sort((a, b) => a.label.localeCompare(b.label, lang));
+    },
+    [branches, lang],
   );
 
   const toggle = (k: ChipKey) =>

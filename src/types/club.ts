@@ -1,6 +1,12 @@
 export type PaymentMethod = "cash" | "card" | "payme" | "click" | "uzum";
 export type ZoneType = "pc" | "ps" | "cinema";
 
+/** uz/ru matn juftligi. */
+export interface Localized {
+  uz: string;
+  ru: string;
+}
+
 export interface Brand {
   id: string;
   name: string;
@@ -13,8 +19,10 @@ export interface Branch {
   id: string;
   brandId: string;
   name: string;
-  district: string;
-  address: string;
+  /** Qisqa tuman nomi (suffiksiz): uz "Mirzo Ulug'bek", ru "Мирзо-Улугбекский". uz qiymati filtr kaliti. */
+  district: Localized;
+  /** Ko'cha va uy: uz "Shahrisabz ko'chasi, 1", ru "ул. Шахрисабз, 1" */
+  address: Localized;
   /** null — koordinata hali kiritilmagan */
   lat: number | null;
   lng: number | null;

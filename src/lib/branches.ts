@@ -1,6 +1,6 @@
 // Toza (server/client'da ishlaydigan) yordamchilar: tiplar, filtr, saralash, formatlash.
 // Data fayllarini import QILMAYDI — client komponentlar xavfsiz ishlatadi.
-import type { Brand, PaymentMethod, Price, Zone, Branch } from "@/types/club";
+import type { Brand, Localized, PaymentMethod, Price, Zone, Branch } from "@/types/club";
 
 export const RTX_40_RE = /RTX\s*40\d0/i;
 
@@ -9,7 +9,7 @@ export const isNightPrice = (p: Price) => !!p.timeWindow?.startsWith("00:00");
 export interface BranchView extends Branch {
   brand: Brand;
   zones: (Zone & { prices: Price[] })[];
-  /** so'm/soat: PC zonalardagi eng arzon 1 soatlik tarif (kunduzgi aksiya ham); 1 soatlik yo'q bo'lsa paket narx/soat; narx yo'q bo'lsa null */
+  /** so'm/soat: barcha zonalardagi eng arzon oddiy (vaqt oynasisiz) 1 soatlik narx — `minRegularHourPrice`; narx yo'q bo'lsa null */
   minPricePerHour: number | null;
   /** PC zonalar orasida eng kuchli videokarta (reyting jadvalidan), noma'lum bo'lsa birinchisi */
   bestGpu: string | null;
@@ -43,7 +43,7 @@ export interface BranchFilters {
 export function filterBranches(views: BranchView[], f: BranchFilters = {}): BranchView[] {
   const q = f.query?.trim().toLowerCase();
   const out = views.filter((b) => {
-    if (f.district && b.district !== f.district) return false;
+    if (f.district && b.district.uz !== f.district) return false;
     if (f.is24_7 !== undefined && b.is24_7 !== f.is24_7) return false;
     if (f.hasBar !== undefined && b.hasBar !== f.hasBar) return false;
     if (f.verified !== undefined && b.verified !== f.verified) return false;
@@ -53,13 +53,28 @@ export function filterBranches(views: BranchView[], f: BranchFilters = {}): Bran
     if (f.maxPricePerHour !== undefined &&
         (b.minPricePerHour === null || b.minPricePerHour > f.maxPricePerHour)) return false;
     if (f.minHz !== undefined && (b.maxHz === null || b.maxHz < f.minHz)) return false;
-    if (q && !`${b.brand.name} ${b.name} ${b.district}`.toLowerCase().includes(q)) return false;
+    if (q && !`${b.brand.name} ${b.name} ${b.district.uz} ${b.district.ru}`.toLowerCase().includes(q)) return false;
     return true;
   });
   if (f.sortBy === "price") {
     out.sort((a, b) => (a.minPricePerHour ?? Infinity) - (b.minPricePerHour ?? Infinity));
   }
   return out;
+}
+
+export const localize = (l: Localized, lang: string): string =>
+  (lang === "ru" ? l.ru : l.uz) || l.uz;
+
+/**
+ * Club kartasidagi "dan X": barcha zonalardagi eng arzon oddiy 1 soatlik narx.
+ * Vaqtga bog'liq narxlar (timeWindow: kunduzgi aksiya, tungi paket) hisobga olinmaydi.
+ * Oddiy 1 soatlik yo'q bo'lsa — oddiy paketlarning narx/soat qiymati; oddiy narx umuman yo'q bo'lsa null.
+ */
+export function minRegularHourPrice(prices: Price[]): number | null {
+  const regular = prices.filter((p) => !p.timeWindow && p.hours > 0);
+  const oneHour = regular.filter((p) => p.hours === 1).map((p) => p.price);
+  const list = oneHour.length ? oneHour : regular.map((p) => Math.round(p.price / p.hours));
+  return list.length ? Math.min(...list) : null;
 }
 
 /** Ikki nuqta orasidagi masofa, km (haversine). */

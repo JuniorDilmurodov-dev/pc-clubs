@@ -62,6 +62,7 @@
     "filtersLabel": "Фильтры",
     "demo": "Демо",
     "open24h": "24/7",
+    "districtFmt": "{name} р-н",
     "pcCount": "{n} ПК",
     "pcCountApprox": "~{n} ПК",
     "priceFrom": "от {price} сум/час",

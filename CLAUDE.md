@@ -20,7 +20,7 @@ Gamerlar PC club'larni (specs, narx, joylashuv) bir joyda topadi.
 - Server'da: `getDictionary(lang)` (`src/i18n/get-dictionary.ts`).
 
 ## Ma'lumot
-- Hozircha `src/data/clubs.ts` seed fayli; tiplar `src/types/club.ts` (Brand → Branch → Zone → Price). Keyinroq Supabase'ga ko'chiriladi — shuning uchun komponentlar ma'lumotni to'g'ridan-to'g'ri fayldan emas, alohida data-access qatlami orqali olsin.
+- Hozircha `src/data/clubs.ts` seed fayli; tiplar `src/types/club.ts` (Brand → Branch → Zone → Price; `Branch.address` va `district` — `{uz, ru}` `Localized`, `localize()` bilan o'qiladi, district.uz — filtr kaliti). Keyinroq Supabase'ga ko'chiriladi — shuning uchun komponentlar ma'lumotni to'g'ridan-to'g'ri fayldan emas, alohida data-access qatlami orqali olsin.
 - Soxta haqiqiy club ma'lumoti kiritilmaydi. Noma'lum maydonlar bo'sh qoladi (`lat`/`lng` — `null`).
 
 ## Hozirgi holat
@@ -29,6 +29,8 @@ Gamerlar PC club'larni (specs, narx, joylashuv) bir joyda topadi.
 - Data-access qatlami + hisoblangan maydonlar + filtrlar; vitest testlari (`npm test`).
 - Bosh sahifa `/[lang]`: xarita (pinlarda narx), filtr chiplari, qidiruv, mobil sheet (vaul), desktop panel, geolokatsiya.
 - i18n (uz/ru) va `/[lang]/club/[id]` stub sahifasi.
+- Club kartasi soddalashtirilgan: nom, 1 qatorli manzil (`<ko'cha> · <tuman>`, truncate), 24/7 belgisi + masofa/vaqt, o'ngda narx. PC soni va specs chiplari olib tashlangan.
+- `minPricePerHour` = `minRegularHourPrice()` (`src/lib/branches.ts`): barcha zonalardagi eng arzon oddiy (timeWindow'siz) 1 soatlik narx; Bezone uchun 20 000 (kunduzgi 15 000 hisobga olinmaydi, u faqat club sahifasida ko'rinadi). Xarita pinlari/filtr/saralash ham shuni ishlatadi.
 - 6-qadam: taxminiy yetib borish vaqti (API'siz) — `src/lib/directions.ts`: yo'l = haversine × 1.3; ≤1.5 km piyoda 5 km/soat, aks holda mashinada 25 km/soat.
 
 **Muhim fayllar**
