@@ -17,10 +17,10 @@ import type { Branch, Brand } from "@/types/club";
 
 // Past → yuqori. Ro'yxatda yo'q GPU reytingga kirmaydi.
 const GPU_ORDER = [
-  "GTX 1650", "GTX 1660", "GTX 1660 Super", "GTX 1660 Ti", "RTX 3050", "RTX 3060",
-  "RTX 4060", "RTX 3060 Ti", "RTX 3070", "RTX 4060 Ti", "RTX 3080", "RTX 4070",
-  "RTX 4070 SUPER", "RTX 4070 Ti", "RTX 4070 Ti SUPER", "RTX 3090", "RTX 4080",
-  "RTX 4080 SUPER", "RTX 4090",
+  "GTX 1650", "GTX 1660", "GTX 1660 Super", "GTX 1660 Ti", "RTX 2060", "RTX 3050", "RTX 3060",
+  "RTX 4060", "RTX 3060 Ti", "RTX 5060", "RTX 3070", "RTX 4060 Ti", "RTX 5060 Ti", "RTX 3080", "RTX 4070",
+  "RTX 4070 SUPER", "RTX 5070", "RTX 4070 Ti", "RTX 4070 Ti SUPER", "RTX 3090", "RTX 5070 Ti", "RTX 4080",
+  "RTX 4080 SUPER", "RTX 4090", "RTX 5080",
 ].map((g) => g.toLowerCase());
 
 const gpuRank = (gpu: string) => GPU_ORDER.indexOf(gpu.trim().toLowerCase());

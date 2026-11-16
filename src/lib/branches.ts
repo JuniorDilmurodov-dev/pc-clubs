@@ -101,9 +101,9 @@ export const formatPrice = (n: number) =>
 export const formatPriceShort = (n: number) =>
   `${(Math.round(n / 100) / 10).toString()}k`;
 
-/** Ko'rsatiladigan nom: demo'larda brend nomi yetarli, haqiqiylarda "Brend Filial". */
-export const branchTitle = (b: Pick<BranchView, "brand" | "name" | "isDemo">) =>
-  b.isDemo ? b.brand.name : `${b.brand.name} ${b.name}`;
+/** Ko'rsatiladigan nom: "Brend Filial"; filial nomi bo'sh bo'lsa (bitta filialli brend) — faqat brend. */
+export const branchTitle = (b: Pick<BranchView, "brand" | "name">) =>
+  [b.brand.name, b.name].filter(Boolean).join(" ");
 
 /** Zona bo'yicha "dan X": eng arzon 1 soatlik tarif; yo'q bo'lsa paket narx/soat. Narx yo'q bo'lsa null. */
 export function zoneMinPrice(prices: Price[]): number | null {

@@ -23,19 +23,16 @@ export default function BottomActions({
       className="fixed inset-x-0 bottom-0 z-50 border-t border-line bg-background/95 backdrop-blur"
     >
       <div className="mx-auto flex max-w-2xl items-stretch gap-2 px-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3">
-        {links.tel ? (
+        {/* Aloqa ma'lumoti yo'q bo'lsa tugma umuman ko'rsatilmaydi (Yo'nalish qoladi) */}
+        {links.tel && (
           <a href={links.tel} className={`${btn} bg-accent text-accent-ink active:opacity-80`}>
             <PhoneIcon className="size-6" />{dict.call}
           </a>
-        ) : (
-          <span aria-disabled="true" className={`${btn} ${disabled}`}><PhoneIcon className="size-6" />{dict.call}</span>
         )}
-        {links.telegram ? (
+        {links.telegram && (
           <a href={links.telegram} target="_blank" rel="noopener noreferrer" className={`${btn} ${enabled}`}>
             <SendIcon className="size-6" />{dict.telegram}
           </a>
-        ) : (
-          <span aria-disabled="true" className={`${btn} ${disabled}`}><SendIcon className="size-6" />{dict.telegram}</span>
         )}
         {links.yandex ? (
           <div className={`flex flex-1 flex-col overflow-hidden rounded-2xl ${enabled}`}>

@@ -28,7 +28,8 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/club/[id]"
   if (!b) return {};
 
   const name = branchTitle(b);
-  const place = localize(b.district, lang) || dict.common.city;
+  const district = localize(b.district, lang);
+  const place = district ? fmt(dict.home.districtFmt, { name: district }) : dict.common.city;
   const c = dict.club;
   const description = [
     fmt(c.metaDescBase, { name, place }),
@@ -40,8 +41,9 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/club/[id]"
   return {
     title: fmt(c.metaTitle, { name, place }),
     description,
-    // To'qima demo club'lar qidiruvga tushmasin
-    robots: b.isDemo ? { index: false, follow: false } : undefined,
+    // To'qima demo club'lar hech qachon qidiruvga tushmasin. Haqiqiy club'da kalit umuman qaytarilmaydi —
+    // layout'dagi qiymat (ALLOW_INDEX bo'yicha noindex/index) meros bo'lib qoladi; `undefined` uni o'chirib yuborardi.
+    ...(b.isDemo ? { robots: { index: false, follow: false } } : {}),
   };
 }
 
@@ -58,7 +60,11 @@ export default async function ClubPage({ params }: PageProps<"/[lang]/club/[id]"
   const c = dict.club;
   const hours = branch.is24_7 ? dict.common.open24h : branch.hours || null;
   const hasCoords = branch.lat !== null && branch.lng !== null;
-  const place = [localize(branch.district, lang), localize(branch.address, lang)].filter(Boolean).join(" · ");
+  const district = localize(branch.district, lang);
+  const place = [
+    district ? fmt(dict.home.districtFmt, { name: district }) : "",
+    localize(branch.address, lang),
+  ].filter(Boolean).join(" · ");
 
   return (
     <div className="mx-auto w-full max-w-2xl pb-32">
@@ -106,7 +112,7 @@ export default async function ClubPage({ params }: PageProps<"/[lang]/club/[id]"
           {!branch.verified && (
             <p className="mt-4 flex items-start gap-2 rounded-xl border border-amber-400/40 bg-amber-400/10 px-3 py-2 text-sm text-amber-200">
               <WarnIcon className="mt-0.5 size-4 shrink-0" />
-              {c.unverified}
+              {branch.isDemo ? c.demoNotice : c.unverified}
             </p>
           )}
         </header>

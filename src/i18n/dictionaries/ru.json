@@ -61,6 +61,8 @@
     "langSwitch": "Язык",
     "filtersLabel": "Фильтры",
     "demo": "Демо",
+    "demoBanner": "Тестовая версия: клубы с меткой {demo} — примеры",
+    "demoBannerClose": "Закрыть",
     "open24h": "24/7",
     "districtFmt": "{name} р-н",
     "verifiedLabel": "Подтверждён",
@@ -93,6 +95,7 @@
     "back": "Назад",
     "demo": "Демо",
     "unverified": "Данные ещё не подтверждены клубом",
+    "demoNotice": "Это пример, не настоящий клуб",
     "imagePlaceholder": "Фото скоро появится",
     "distanceFromYou": "От вас {d}",
     "km": "{n} км",
@@ -143,6 +146,11 @@
     "metaDescPrice": "Цены от {price} сум в час.",
     "metaDescZones": "Зоны: {zones}.",
     "metaDescGpu": "Самая мощная видеокарта: {gpu}."
+  },
+  "notFound": {
+    "title": "Страница не найдена",
+    "text": "Такого клуба или страницы нет.",
+    "home": "На главную"
   },
   "travel": {
     "min": "{n} мин",

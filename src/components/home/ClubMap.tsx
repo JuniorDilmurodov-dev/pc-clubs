@@ -17,10 +17,11 @@ const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
 // iconSize [0,0]: pin CSS bilan (.name-pin) pastki markazga joylanadi, kengligi nomga qarab o'zgaradi
-const pinIcon = (name: string, selected: boolean) =>
+// Demo pinlar xira (.is-demo); tanlanganda esa oddiy tanlangan uslubda
+const pinIcon = (name: string, selected: boolean, demo = false) =>
   L.divIcon({
     className: "",
-    html: `<div class="name-pin${selected ? " is-selected" : ""}">${esc(shortenPinLabel(name))}</div>`,
+    html: `<div class="name-pin${selected ? " is-selected" : demo ? " is-demo" : ""}">${esc(shortenPinLabel(name))}</div>`,
     iconSize: [0, 0],
     iconAnchor: [0, 0],
   });
@@ -79,7 +80,7 @@ function ClubMapInner({
   const selected = withCoords.find((b) => b.id === selectedId);
 
   const markers = useMemo(
-    () => others.map((b) => ({ b, icon: pinIcon(branchTitle(b), false) })),
+    () => others.map((b) => ({ b, icon: pinIcon(branchTitle(b), false, !!b.isDemo) })),
     [others],
   );
 

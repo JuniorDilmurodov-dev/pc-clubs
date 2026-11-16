@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { Drawer } from "vaul";
+import { SHOW_DEMO } from "@/config";
 import { distanceKm, filterBranches, type BranchView } from "@/lib/branches";
 import {
   applyFilters, cardPrice, parseFilters, parseSort, serializeFilters, sortBranches,
@@ -13,6 +14,7 @@ import { fmt } from "@/lib/i18n-format";
 import { readHomeSession, writeHomeSession } from "@/lib/session-state";
 import type { Locale } from "@/i18n/config";
 import BranchList from "./BranchList";
+import DemoBanner from "./DemoBanner";
 import FilterChips from "./FilterChips";
 import LangSwitcher from "./LangSwitcher";
 import SearchBar from "./SearchBar";
@@ -168,7 +170,9 @@ export default function HomeView({
   );
 
   return (
-    <div className="relative h-dvh w-full overflow-hidden">
+    <div className="flex h-dvh w-full flex-col">
+    {SHOW_DEMO && <DemoBanner text={dict.demoBanner} badge={dict.demo} closeLabel={dict.demoBannerClose} />}
+    <div className="relative min-h-0 w-full flex-1 overflow-hidden">
       {/* Xarita */}
       <div className="absolute inset-0 lg:left-[420px]">
         <ClubMap branches={list} selectedId={selectedId} onSelect={select} user={user} locateKey={locateKey} label={dict.mapLabel} />
@@ -226,6 +230,7 @@ export default function HomeView({
           </Drawer.Portal>
         </Drawer.Root>
       )}
+    </div>
     </div>
   );
 }

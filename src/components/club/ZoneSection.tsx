@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useState, type ReactNode } from "react";
-import { bestPriceIndex, formatPrice, isNightPrice, zoneMinPrice } from "@/lib/branches";
+import { bestPriceIndex, formatPrice, isNightPrice, minRegularHourPrice } from "@/lib/branches";
 import { fmt } from "@/lib/i18n-format";
 import type { Price, Zone } from "@/types/club";
 import {
@@ -63,7 +63,8 @@ export default function ZoneSection({
       >
         {zones.map((z) => {
           const selected = z.id === zone.id;
-          const min = zoneMinPrice(z.prices);
+          // Kartadagi narx bilan bir xil qoida: oddiy (vaqt oynasisiz) 1 soatlik narx. Kunduzgi chegirma jadvalda ko'rinadi.
+          const min = minRegularHourPrice(z.prices);
           return (
             <button
               key={z.id}

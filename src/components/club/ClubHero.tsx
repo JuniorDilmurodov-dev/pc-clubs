@@ -37,7 +37,7 @@ export default function ClubHero({ lang, dict, isDemo }: { lang: string; dict: C
         {dict.back}
       </BackLink>
       {isDemo && (
-        <span className="absolute right-3 top-3 rounded-md bg-surface-2 px-2 py-1 text-xs font-semibold uppercase text-foreground ring-1 ring-line">
+        <span className="absolute right-3 top-3 rounded-md bg-amber-400 px-2 py-1 text-xs font-extrabold uppercase tracking-wide text-black">
           {dict.demo}
         </span>
       )}

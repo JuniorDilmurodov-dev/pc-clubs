@@ -61,6 +61,8 @@
     "langSwitch": "Til",
     "filtersLabel": "Filtrlar",
     "demo": "Demo",
+    "demoBanner": "Sinov versiyasi: {demo} belgili club'lar namuna uchun",
+    "demoBannerClose": "Yopish",
     "open24h": "24/7",
     "districtFmt": "{name} tumani",
     "verifiedLabel": "Tasdiqlangan",
@@ -93,6 +95,7 @@
     "back": "Orqaga",
     "demo": "Demo",
     "unverified": "Ma'lumot hali club tomonidan tasdiqlanmagan",
+    "demoNotice": "Bu namuna club, haqiqiy emas",
     "imagePlaceholder": "Rasm tez orada qo'shiladi",
     "distanceFromYou": "Sizdan {d}",
     "km": "{n} km",
@@ -143,6 +146,11 @@
     "metaDescPrice": "Narxlar soatiga {price} so'mdan.",
     "metaDescZones": "Zonalar: {zones}.",
     "metaDescGpu": "Eng kuchli videokarta: {gpu}."
+  },
+  "notFound": {
+    "title": "Sahifa topilmadi",
+    "text": "Bunday club yoki sahifa yo'q.",
+    "home": "Bosh sahifaga qaytish"
   },
   "travel": {
     "min": "{n} daq",
