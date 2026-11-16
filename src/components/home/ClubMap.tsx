@@ -7,23 +7,20 @@ import MarkerClusterGroup from "react-leaflet-cluster";
 import "leaflet/dist/leaflet.css";
 import "react-leaflet-cluster/dist/assets/MarkerCluster.css";
 import { MAP_TILES } from "@/config";
-import { branchTitle, type BranchView } from "@/lib/branches";
+import { branchTitle, shortenPinLabel, type BranchView } from "@/lib/branches";
 
 const TASHKENT: [number, number] = [41.2995, 69.2401];
-const MAX_LABEL = 14;
 /** Tanlanganda shu zoom'ga yaqinlashadi; klasterlash shundan boshlab o'chadi */
 const SELECT_ZOOM = 15;
 
 const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
-const shorten = (s: string) => (s.length > MAX_LABEL ? `${s.slice(0, MAX_LABEL).trimEnd()}…` : s);
-
 // iconSize [0,0]: pin CSS bilan (.name-pin) pastki markazga joylanadi, kengligi nomga qarab o'zgaradi
 const pinIcon = (name: string, selected: boolean) =>
   L.divIcon({
     className: "",
-    html: `<div class="name-pin${selected ? " is-selected" : ""}">${esc(shorten(name))}</div>`,
+    html: `<div class="name-pin${selected ? " is-selected" : ""}">${esc(shortenPinLabel(name))}</div>`,
     iconSize: [0, 0],
     iconAnchor: [0, 0],
   });

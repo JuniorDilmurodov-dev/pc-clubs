@@ -77,6 +77,13 @@ export function minRegularHourPrice(prices: Price[]): number | null {
   return list.length ? Math.min(...list) : null;
 }
 
+/** Xarita pini yozuvining maksimal uzunligi (belgi). Cheklov faqat shu yerda. */
+export const PIN_LABEL_MAX = 20;
+
+/** PIN_LABEL_MAX dan uzun bo'lsa, oxiri "…" bilan qisqartiriladi. */
+export const shortenPinLabel = (s: string) =>
+  s.length > PIN_LABEL_MAX ? `${s.slice(0, PIN_LABEL_MAX).trimEnd()}…` : s;
+
 /** Ikki nuqta orasidagi masofa, km (haversine). */
 export function distanceKm(a: { lat: number; lng: number }, b: { lat: number; lng: number }) {
   const rad = (d: number) => (d * Math.PI) / 180;

@@ -39,7 +39,6 @@ body {
   position: relative;
   transform: translate(-50%, calc(-100% - 7px));
   width: max-content;
-  max-width: 180px;
   padding: 7px 11px;
   background: #1c2230;
   color: #fff;

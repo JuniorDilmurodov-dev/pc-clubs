@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { localize, minRegularHourPrice } from "./branches";
+import { localize, minRegularHourPrice, PIN_LABEL_MAX, shortenPinLabel } from "./branches";
 import type { Price } from "@/types/club";
 
 const p = (hours: number, price: number, timeWindow?: string): Price => ({
@@ -34,5 +34,20 @@ describe("localize", () => {
     expect(localize({ uz: "a", ru: "б" }, "ru")).toBe("б");
     expect(localize({ uz: "a", ru: "б" }, "uz")).toBe("a");
     expect(localize({ uz: "a", ru: "" }, "ru")).toBe("a");
+  });
+});
+
+describe("shortenPinLabel", () => {
+  it("PIN_LABEL_MAX = 20", () => {
+    expect(PIN_LABEL_MAX).toBe(20);
+  });
+
+  it("20 belgigacha o'zgarishsiz qoladi", () => {
+    expect(shortenPinLabel("Bezone Gaming C1")).toBe("Bezone Gaming C1");
+    expect(shortenPinLabel("a".repeat(20))).toBe("a".repeat(20));
+  });
+
+  it("20 dan oshsa 20 belgi + '…'", () => {
+    expect(shortenPinLabel("a".repeat(21))).toBe(`${"a".repeat(20)}…`);
   });
 });
