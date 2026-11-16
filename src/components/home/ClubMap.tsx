@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import L from "leaflet";
-import { AttributionControl, MapContainer, Marker, TileLayer, ZoomControl, useMap } from "react-leaflet";
+import { AttributionControl, MapContainer, Marker, TileLayer, ZoomControl, useMap, useMapEvents } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import "leaflet/dist/leaflet.css";
 import "react-leaflet-cluster/dist/assets/MarkerCluster.css";
@@ -43,10 +43,22 @@ const userIcon = L.divIcon({
   iconAnchor: [9, 9],
 });
 
-function Controller({ branches, selectedId, user, locateKey }: {
+function Controller({ branches, selectedId, user, locateKey, visible, onBackgroundClick }: {
   branches: BranchView[]; selectedId: string | null; user: { lat: number; lng: number } | null; locateKey: number;
+  visible: boolean; onBackgroundClick?: () => void;
 }) {
   const map = useMap();
+
+  // Xarita yashirin (display:none) holatdan ko'rinishga o'tganda o'lchamini qayta hisoblaydi — aks holda tile'lar kesilib chiqadi
+  useEffect(() => {
+    if (!visible) return;
+    map.invalidateSize();
+    const id = requestAnimationFrame(() => map.invalidateSize());
+    return () => cancelAnimationFrame(id);
+  }, [visible, map]);
+
+  // Bo'sh joy bosilganda (marker/klaster bosilishi bu yerga yetib kelmaydi)
+  useMapEvents({ click: () => onBackgroundClick?.() });
 
   useEffect(() => {
     const b = branches.find((x) => x.id === selectedId);
@@ -54,7 +66,7 @@ function Controller({ branches, selectedId, user, locateKey }: {
     const zoom = Math.max(map.getZoom(), SELECT_ZOOM);
     const mobile = window.matchMedia("(max-width: 1023px)").matches;
     const p = map.project([b.lat, b.lng], zoom);
-    if (mobile) p.y += window.innerHeight * 0.2; // pin sheet'dan yuqorida ko'rinsin
+    if (mobile) p.y += 40; // pin pastdagi karta va tepadagi chiplar orasida, ozgina yuqoriroqda ko'rinsin
     map.flyTo(map.unproject(p, zoom), zoom, { duration: 0.6 });
     // faqat tanlov o'zgarganda
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -69,10 +81,14 @@ function Controller({ branches, selectedId, user, locateKey }: {
 }
 
 function ClubMapInner({
-  branches, selectedId, onSelect, user, locateKey, label,
+  branches, selectedId, onSelect, user, locateKey, label, visible, onBackgroundClick,
 }: {
   branches: BranchView[]; selectedId: string | null; onSelect: (id: string) => void;
   user: { lat: number; lng: number } | null; locateKey: number; label: string;
+  /** Xarita hozir ekranda ko'rinadimi (mobil Ro'yxat rejimida yashirin saqlanadi) */
+  visible: boolean;
+  /** Xaritaning bo'sh joyi bosilganda */
+  onBackgroundClick?: () => void;
 }) {
   const withCoords = useMemo(() => branches.filter((b) => b.lat !== null && b.lng !== null), [branches]);
   // Tanlangan pin klasterdan tashqarida: doim ko'rinadi
@@ -102,7 +118,7 @@ function ClubMapInner({
       />
       <AttributionControl position="bottomright" prefix={false} />
       <ZoomControl position="bottomright" />
-      <Controller branches={branches} selectedId={selectedId} user={user} locateKey={locateKey} />
+      <Controller branches={branches} selectedId={selectedId} user={user} locateKey={locateKey} visible={visible} onBackgroundClick={onBackgroundClick} />
       <MarkerClusterGroup
         chunkedLoading
         maxClusterRadius={70}

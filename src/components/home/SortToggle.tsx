@@ -11,7 +11,7 @@ export default function SortToggle({
     { key: "price", label: dict.sortPrice, disabled: false },
   ];
   return (
-    <div role="group" aria-label={dict.sortLabel} data-vaul-no-drag className="flex shrink-0 rounded-lg border border-line bg-surface p-0.5 text-sm font-semibold">
+    <div role="group" aria-label={dict.sortLabel} className="flex shrink-0 rounded-lg border border-line bg-surface p-0.5 text-sm font-semibold">
       {opts.map((o) => (
         <button
           key={o.key}

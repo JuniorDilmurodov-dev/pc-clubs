@@ -104,11 +104,11 @@ body {
   font-family: inherit;
 }
 
-/* Mobilda sheet pastni yopadi — attribution tepaga, qidiruv panelidan pastga */
+/* Mobilda pastni suzuvchi tugma/karta egallaydi — attribution va zoom tepaga, qidiruv+chiplar panelidan pastga */
 @media (max-width: 1023px) {
   .leaflet-bottom.leaflet-right {
     bottom: auto;
-    top: 72px;
+    top: 128px;
   }
 }
 .no-scrollbar {

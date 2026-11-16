@@ -117,5 +117,7 @@ describe("havolalar", () => {
     expect(homeHref("uz", set("500hz", "cs2"), "price")).toBe("/uz?f=cs2,500hz&sort=price");
     expect(homeHref("ru", set("24h"), null)).toBe("/ru?f=24h");
     expect(homeHref("uz", set(), null)).toBe("/uz");
+    expect(homeHref("uz", set("cs2"), "price", "map")).toBe("/uz?f=cs2&sort=price&view=map");
+    expect(homeHref("ru", set(), null, "map")).toBe("/ru?view=map");
   });
 });

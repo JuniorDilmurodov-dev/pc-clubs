@@ -6,6 +6,8 @@ export interface HomeSession {
   chips: string[];
   sort: string | null;
   selectedId: string | null;
+  /** Mobil rejim: "map" yoki "list" (default) */
+  view?: string | null;
   user: { lat: number; lng: number } | null;
 }
 

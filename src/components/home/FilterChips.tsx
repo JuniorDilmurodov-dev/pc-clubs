@@ -16,7 +16,7 @@ export default function FilterChips({
 }) {
   return (
     <div>
-      <div role="group" aria-label={dict.filtersLabel} data-vaul-no-drag className="no-scrollbar flex flex-nowrap gap-2 overflow-x-auto px-4 py-1">
+      <div role="group" aria-label={dict.filtersLabel} className="no-scrollbar flex flex-nowrap gap-2 overflow-x-auto px-4 py-1">
         {FILTER_KEYS.map((k) => (
           <button key={k} type="button" aria-pressed={active.has(k)} onClick={() => onToggle(k)} className={`${base} ${active.has(k) ? on : off}`}>
             {dict.filters[k]}

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSyncExternalStore, type ReactNode } from "react";
-import { homeHref, parseFilters, parseSort } from "@/lib/filters";
+import { homeHref, parseFilters, parseSort, parseView } from "@/lib/filters";
 import { readHomeSession } from "@/lib/session-state";
 
 const noop = () => () => {};
@@ -15,7 +15,7 @@ export default function BackLink({
     noop,
     () => {
       const s = readHomeSession();
-      return homeHref(lang, new Set(parseFilters(s?.chips?.join(","))), parseSort(s?.sort));
+      return homeHref(lang, new Set(parseFilters(s?.chips?.join(","))), parseSort(s?.sort), parseView(s?.view));
     },
     () => `/${lang}`,
   );

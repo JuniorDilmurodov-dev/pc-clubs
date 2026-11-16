@@ -84,11 +84,15 @@ export function cardPrice(b: BranchView, active: Active): CardPrice {
 export const clubHref = (lang: string, branchId: string, price: Pick<CardPrice, "zoneId">) =>
   `/${lang}/club/${branchId}${price.zoneId ? `?zone=${encodeURIComponent(price.zoneId)}` : ""}`;
 
+export type ViewMode = "list" | "map";
+export const parseView = (v: string | null | undefined): ViewMode => (v === "map" ? "map" : "list");
+
 /** Bosh sahifa havolasi filtr holati bilan: `/uz?f=cs2,500hz&sort=price`. */
-export function homeHref(lang: string, active: Active, sort: SortKey | null): string {
+export function homeHref(lang: string, active: Active, sort: SortKey | null, view: ViewMode = "list"): string {
   const q = [
     active.size ? `f=${serializeFilters(active)}` : "",
     sort ? `sort=${sort}` : "",
+    view === "map" ? "view=map" : "",
   ].filter(Boolean).join("&");
   return `/${lang}${q ? `?${q}` : ""}`;
 }
