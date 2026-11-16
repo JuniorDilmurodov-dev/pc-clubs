@@ -1,26 +1,121 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0b0d12;
+  --foreground: #e8ebf2;
+  --surface: #141821;
+  --surface-2: #1c2230;
+  --line: #2a3142;
+  --muted: #a3acc0;
+  --accent: #a3e635;
+  --accent-ink: #0b0d12;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: dark;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* Xarita pinlari (leaflet divIcon): nom, pastida uchi bilan. Anchor — pastki markaz */
+.name-pin {
+  position: relative;
+  transform: translate(-50%, calc(-100% - 7px));
+  width: max-content;
+  max-width: 180px;
+  padding: 7px 11px;
+  background: #1c2230;
+  color: #fff;
+  border: 2px solid #cbd2e1;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.6);
+}
+.name-pin::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 8px;
+  height: 8px;
+  background: inherit;
+  border-right: 2px solid #cbd2e1;
+  border-bottom: 2px solid #cbd2e1;
+  transform: translateX(-50%) rotate(45deg) scale(0.9);
+  border-bottom-right-radius: 2px;
+}
+.name-pin.is-selected {
+  transform: translate(-50%, calc(-100% - 9px)) scale(1.3);
+  transform-origin: 50% 100%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: #fff;
+  box-shadow: 0 3px 14px rgb(163 230 53 / 0.55);
+}
+.name-pin.is-selected::after {
+  border-color: #fff;
+}
+.cluster-pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  background: #1c2230;
+  color: #fff;
+  border: 3px solid var(--accent);
+  box-shadow: 0 0 0 5px rgb(163 230 53 / 0.25), 0 2px 8px rgb(0 0 0 / 0.6);
+  font-weight: 800;
+  font-size: 15px;
+}
+.leaflet-container {
+  background: var(--background);
+  font-family: inherit;
+}
+
+/* Mobilda sheet pastni yopadi — attribution tepaga, qidiruv panelidan pastga */
+@media (max-width: 1023px) {
+  .leaflet-bottom.leaflet-right {
+    bottom: auto;
+    top: 72px;
+  }
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.leaflet-container a {
+  color: inherit;
+}
+.leaflet-control-attribution {
+  background: rgb(11 13 18 / 0.75) !important;
+  color: var(--muted) !important;
+}
+
+/* OSM tile'larini qorong'i uslubga keltirish (config.ts: MAP_TILES.invertToDark) */
+.tiles-dark {
+  filter: invert(1) hue-rotate(180deg) brightness(0.85) contrast(0.9) saturate(0.6);
 }
