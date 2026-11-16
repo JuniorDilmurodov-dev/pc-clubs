@@ -91,6 +91,18 @@ export default async function ClubPage({ params }: PageProps<"/[lang]/club/[id]"
               />
             )}
           </ul>
+          {branch.verified && (
+            <p className="mt-4 flex items-start gap-2 rounded-xl border border-accent/40 bg-accent/10 px-3 py-2 text-sm text-accent">
+              <svg aria-hidden viewBox="0 0 24 24" className="mt-0.5 size-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" strokeWidth="2" />
+                <path d="m8 12.5 2.8 2.8L16.5 9.5" />
+              </svg>
+              <span>
+                {c.verifiedBy}
+                <span className="block text-xs text-muted">{fmt(c.updated, { date: formatDate(branch.updatedAt, c.months) })}</span>
+              </span>
+            </p>
+          )}
           {!branch.verified && (
             <p className="mt-4 flex items-start gap-2 rounded-xl border border-amber-400/40 bg-amber-400/10 px-3 py-2 text-sm text-amber-200">
               <WarnIcon className="mt-0.5 size-4 shrink-0" />
@@ -140,9 +152,11 @@ export default async function ClubPage({ params }: PageProps<"/[lang]/club/[id]"
               {branch.hasBar ? c.bar : c.noBar}
             </p>
           </div>
-          <p className="mt-3 text-sm text-muted">
-            {fmt(c.updated, { date: formatDate(branch.updatedAt, c.months) })}
-          </p>
+          {!branch.verified && (
+            <p className="mt-3 text-sm text-muted">
+              {fmt(c.updated, { date: formatDate(branch.updatedAt, c.months) })}
+            </p>
+          )}
         </section>
 
         <p className="text-center text-sm">

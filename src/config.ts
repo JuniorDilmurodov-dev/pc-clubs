@@ -18,5 +18,5 @@ export const MAP_TILES = {
   invertToDark: true,
 };
 
-/** "Ma'lumot noto'g'rimi?" havolasi. PLACEHOLDER — productionga chiqishdan oldin haqiqiy Telegram manzilga almashtiring. */
-export const FEEDBACK_TELEGRAM = "https://t.me/pcclubfinder_feedback";
+/** Telegram aloqa havolasi: "Ma'lumot noto'g'rimi?" va "Club egasimisiz?" — ikkalasi faqat shu konstantadan oladi. */
+export const FEEDBACK_TELEGRAM = "https://t.me/junior_dilmurodov";

@@ -40,6 +40,13 @@ export default function ClubCard({
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <h3 className="truncate text-base font-bold">{branchTitle(b)}</h3>
+          {b.verified && (
+            <svg role="img" aria-label={dict.verifiedLabel} viewBox="0 0 24 24" className="size-[18px] shrink-0 text-accent" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <title>{dict.verifiedLabel}</title>
+              <circle cx="12" cy="12" r="10" strokeWidth="2" />
+              <path d="m8 12.5 2.8 2.8L16.5 9.5" />
+            </svg>
+          )}
           {b.isDemo && (
             <span className="shrink-0 rounded bg-surface-2 px-1.5 py-0.5 text-[11px] font-semibold uppercase text-muted ring-1 ring-line">
               {dict.demo}
