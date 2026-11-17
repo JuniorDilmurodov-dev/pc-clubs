@@ -116,7 +116,7 @@ function ClubMapInner({
         maxZoom={MAP_TILES.maxZoom}
         className={MAP_TILES.invertToDark ? "tiles-dark" : undefined}
       />
-      <AttributionControl position="bottomright" prefix={false} />
+      <AttributionControl position="bottomleft" prefix={false} />
       <ZoomControl position="bottomright" />
       <Controller branches={branches} selectedId={selectedId} user={user} locateKey={locateKey} visible={visible} onBackgroundClick={onBackgroundClick} />
       <MarkerClusterGroup

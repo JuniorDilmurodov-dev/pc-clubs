@@ -121,9 +121,13 @@ body {
   color: inherit;
 }
 .leaflet-control-attribution {
-  background: rgb(11 13 18 / 0.75) !important;
-  color: var(--muted) !important;
+  font-size: 9px !important;
+  background: rgba(0,0,0,0.3) !important;
+  color: #aaa !important;
+  padding: 0 4px !important;
+  line-height: 14px !important;
 }
+.leaflet-control-attribution a { color: #aaa !important; }
 
 /* OSM tile'larini qorong'i uslubga keltirish (config.ts: MAP_TILES.invertToDark) */
 .tiles-dark {
