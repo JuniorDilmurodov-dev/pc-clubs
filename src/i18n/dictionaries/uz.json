@@ -51,7 +51,7 @@
     "phone": "Telefon"
   },
   "home": {
-    "searchPlaceholder": "Club yoki tuman",
+    "searchPlaceholder": "Club nomini qidiring…",
     "searchLabel": "Qidiruv",
     "clubsCount": "{n} ta club",
     "noResults": "Hech narsa topilmadi",

@@ -51,7 +51,7 @@
     "phone": "Телефон"
   },
   "home": {
-    "searchPlaceholder": "Клуб или район",
+    "searchPlaceholder": "Поиск по названию клуба…",
     "searchLabel": "Поиск",
     "clubsCount": "Клубов: {n}",
     "noResults": "Ничего не найдено",
