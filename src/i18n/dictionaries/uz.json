@@ -60,6 +60,8 @@
     "closeCard": "Kartani yopish",
     "mapLabel": "Club'lar xaritasi",
     "myLocation": "Mening joylashuvim",
+    "locationDenied": "Joylashuvga ruxsat berilmadi. Brauzer sozlamalaridan yoqing.",
+    "locationError": "Joylashuvni aniqlab bo'lmadi. Qayta urinib ko'ring.",
     "langSwitch": "Til",
     "filtersLabel": "Filtrlar",
     "demo": "Demo",

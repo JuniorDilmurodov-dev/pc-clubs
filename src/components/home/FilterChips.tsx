@@ -3,7 +3,7 @@
 import { FILTER_KEYS, type FilterKey } from "@/lib/filters";
 import type { HomeDict } from "./types";
 
-const base = "flex h-10 shrink-0 items-center rounded-full border px-4 text-sm font-semibold whitespace-nowrap";
+const base = "flex h-11 shrink-0 items-center rounded-full border px-4 text-sm font-semibold whitespace-nowrap";
 const on = "border-accent bg-accent text-accent-ink";
 const off = "border-line bg-surface-2 text-foreground";
 

@@ -49,7 +49,7 @@ export default function BottomActions({
                 href={links.google}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex min-h-8 items-center justify-center border-t border-line text-xs text-muted underline underline-offset-2"
+                className="flex min-h-11 items-center justify-center border-t border-line text-xs text-muted underline underline-offset-2"
               >
                 {googleLabel}
               </a>

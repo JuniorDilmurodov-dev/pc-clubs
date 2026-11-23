@@ -48,6 +48,8 @@ export default function HomeView({
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [user, setUser] = useState<{ lat: number; lng: number } | null>(null);
   const [locateKey, setLocateKey] = useState(0);
+  const [locateMsg, setLocateMsg] = useState<string | null>(null);
+  const locateMsgTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [view, setView] = useState<ViewMode>("list");
   // Xarita mobilda birinchi ochilganda mount bo'ladi, keyin yashirin holda saqlanadi
   const [mapOpened, setMapOpened] = useState(false);
@@ -154,14 +156,27 @@ export default function HomeView({
     return () => clearTimeout(t);
   }, [selectedId]);
 
+  const showLocateMsg = (msg: string) => {
+    setLocateMsg(msg);
+    if (locateMsgTimer.current) clearTimeout(locateMsgTimer.current);
+    locateMsgTimer.current = setTimeout(() => setLocateMsg(null), 3500);
+  };
+  useEffect(() => () => {
+    if (locateMsgTimer.current) clearTimeout(locateMsgTimer.current);
+  }, []);
+
   const locate = () => {
-    if (!("geolocation" in navigator)) return;
+    if (!("geolocation" in navigator)) {
+      showLocateMsg(dict.locationError);
+      return;
+    }
     navigator.geolocation.getCurrentPosition(
       (pos) => {
+        setLocateMsg(null);
         setUser({ lat: pos.coords.latitude, lng: pos.coords.longitude });
         setLocateKey((k) => k + 1);
       },
-      () => {}, // ruxsat berilmasa — jim davom etamiz
+      (err) => showLocateMsg(err.code === err.PERMISSION_DENIED ? dict.locationDenied : dict.locationError),
       { enableHighAccuracy: false, timeout: 8000, maximumAge: 60_000 },
     );
   };
@@ -221,6 +236,14 @@ export default function HomeView({
           <circle cx="12" cy="12" r="3" /><circle cx="12" cy="12" r="8" /><path d="M12 1v3M12 20v3M1 12h3M20 12h3" />
         </svg>
       </button>
+      {/* Joylashuv xatosi: tugma yonida qisqa xabar, 3.5 soniyada yo'qoladi */}
+      <div role="status" aria-live="polite" className="contents">
+        {locateMsg && (
+          <p className={`absolute right-[72px] top-4 z-[1000] max-w-72 rounded-lg border border-line bg-surface px-3 py-2 text-sm text-foreground shadow-lg max-lg:fixed max-lg:left-[68px] max-lg:right-3 max-lg:top-[136px] max-lg:max-w-none ${isMap ? "" : "max-lg:hidden"}`}>
+            {locateMsg}
+          </p>
+        )}
+      </div>
 
       {/* Chap panel (desktop). Mobilda `contents`: sarlavha tepada yopishqoq/qotirilgan, ro'yxat oddiy sahifa oqimida */}
       <aside className="contents lg:absolute lg:inset-y-0 lg:left-0 lg:z-[1100] lg:flex lg:w-[420px] lg:flex-col lg:border-r lg:border-line lg:bg-background">

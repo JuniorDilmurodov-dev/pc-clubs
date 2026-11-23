@@ -20,7 +20,7 @@ export default function SortToggle({
           aria-pressed={value === o.key}
           title={o.disabled ? dict.sortNearDisabled : undefined}
           onClick={() => onChange(o.key)}
-          className={`rounded-md px-3 py-1 ${
+          className={`min-h-11 rounded-md px-3 ${
             value === o.key ? "bg-accent text-accent-ink" : "text-muted"
           } disabled:cursor-not-allowed disabled:opacity-40`}
         >

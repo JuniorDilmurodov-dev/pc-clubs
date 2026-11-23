@@ -50,6 +50,16 @@ body {
   white-space: nowrap;
   box-shadow: 0 2px 8px rgb(0 0 0 / 0.6);
 }
+/* Ko'rinmas bosish maydoni: pin ~31px, ::before uni ≥44px ga kengaytiradi (ko'rinish/pozitsiya o'zgarmaydi) */
+.name-pin::before {
+  content: "";
+  position: absolute;
+  top: -9px;
+  bottom: -9px;
+  left: 50%;
+  width: max(100% + 8px, 44px);
+  transform: translateX(-50%);
+}
 .name-pin::after {
   content: "";
   position: absolute;
