@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import { Geist, Geist_Mono } from "next/font/google";
-import { ALLOW_INDEX } from "@/config";
+import { ALLOW_INDEX, THEME_BG } from "@/config";
 import { hasLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import "../globals.css";
@@ -20,6 +20,12 @@ export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
 
+// viewportFit "cover": standalone (black-translucent) rejimda env(safe-area-inset-*) ishlashi uchun
+export const viewport: Viewport = {
+  themeColor: THEME_BG,
+  viewportFit: "cover",
+};
+
 export async function generateMetadata({
   params,
 }: LayoutProps<"/[lang]">): Promise<Metadata> {
@@ -29,6 +35,7 @@ export async function generateMetadata({
   return {
     title: dict.meta.title,
     description: dict.meta.description,
+    appleWebApp: { capable: true, title: "PC Club", statusBarStyle: "black-translucent" },
     robots: ALLOW_INDEX ? { index: true, follow: true } : { index: false, follow: false },
   };
 }

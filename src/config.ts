@@ -20,3 +20,6 @@ export const MAP_TILES = {
 
 /** Telegram aloqa havolasi: "Ma'lumot noto'g'rimi?" va "Club egasimisiz?" — ikkalasi faqat shu konstantadan oladi. */
 export const FEEDBACK_TELEGRAM = "https://t.me/junior_dilmurodov";
+
+/** Asosiy qorong'i fon — globals.css dagi `--background` bilan bir xil (manifest, theme-color). Test tekshiradi. */
+export const THEME_BG = "#0b0d12";

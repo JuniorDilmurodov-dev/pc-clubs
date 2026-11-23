@@ -225,7 +225,7 @@ export default function HomeView({
   const iconCls = "size-5";
 
   return (
-    <div className="flex min-h-dvh w-full flex-col lg:h-dvh lg:min-h-0">
+    <div className="flex min-h-[calc(100dvh-env(safe-area-inset-top))] w-full flex-col lg:h-[calc(100dvh-env(safe-area-inset-top))] lg:min-h-0">
     {SHOW_DEMO && (
       <div className={isMap ? "max-lg:hidden" : undefined}>
         <DemoBanner text={dict.demoBanner} badge={dict.demo} closeLabel={dict.demoBannerClose} />
@@ -258,7 +258,7 @@ export default function HomeView({
       {/* Joylashuv xatosi: qisqa xabar, 3.5 soniyada yo'qoladi (desktop — tugma yonida, mobil — chiplar ostida, karta ustiga tushmasin) */}
       <div role="status" aria-live="polite" className="contents">
         {locateMsg?.from === "button" && (
-          <p className={`absolute bottom-4 right-[72px] z-[1000] max-w-72 rounded-lg border border-line bg-surface px-3 py-2 text-sm text-foreground shadow-lg max-lg:fixed max-lg:bottom-auto max-lg:left-3 max-lg:right-14 max-lg:top-[132px] max-lg:z-[1200] max-lg:max-w-none ${isMap ? "" : "max-lg:hidden"}`}>
+          <p className={`absolute bottom-4 right-[72px] z-[1000] max-w-72 rounded-lg border border-line bg-surface px-3 py-2 text-sm text-foreground shadow-lg max-lg:fixed max-lg:bottom-auto max-lg:left-3 max-lg:right-14 max-lg:top-[calc(env(safe-area-inset-top)+132px)] max-lg:z-[1200] max-lg:max-w-none ${isMap ? "" : "max-lg:hidden"}`}>
             {locateMsg.text}
           </p>
         )}
@@ -266,7 +266,7 @@ export default function HomeView({
 
       {/* Chap panel (desktop). Mobilda `contents`: sarlavha tepada yopishqoq/qotirilgan, ro'yxat oddiy sahifa oqimida */}
       <aside className="contents lg:absolute lg:inset-y-0 lg:left-0 lg:z-[1100] lg:flex lg:w-[420px] lg:flex-col lg:border-r lg:border-line lg:bg-background">
-        <div className={`z-[1100] bg-background max-lg:inset-x-0 max-lg:top-0 ${isMap ? "max-lg:fixed" : "max-lg:sticky"} lg:static`}>
+        <div className={`z-[1100] bg-background max-lg:inset-x-0 max-lg:top-[env(safe-area-inset-top)] ${isMap ? "max-lg:fixed" : "max-lg:sticky"} lg:static`}>
           <div className="p-3">{searchRow}</div>
           {chips}
           {listHeader}

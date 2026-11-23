@@ -11,7 +11,7 @@ export default function NotFoundView({ texts }: { texts: Record<string, Texts> }
   const lang = typeof raw === "string" && hasLocale(raw) ? raw : defaultLocale;
   const t = texts[lang];
   return (
-    <main className="flex min-h-dvh flex-col items-center justify-center gap-4 px-6 text-center">
+    <main className="flex min-h-[calc(100dvh-env(safe-area-inset-top))] flex-col items-center justify-center gap-4 px-6 text-center">
       <p className="text-6xl font-extrabold text-accent">404</p>
       <h1 className="text-2xl font-extrabold">{t.title}</h1>
       <p className="text-muted">{t.text}</p>

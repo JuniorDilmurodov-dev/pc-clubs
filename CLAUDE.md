@@ -39,6 +39,7 @@ Gamerlar PC club'larni (specs, narx, joylashuv) bir joyda topadi.
 - `minPricePerHour` = `minRegularHourPrice()` (`src/lib/branches.ts`): barcha zonalardagi eng arzon oddiy (timeWindow'siz) 1 soatlik narx; Bezone uchun 20 000 (kunduzgi 15 000 hisobga olinmaydi, u faqat club sahifasidagi narxlar jadvalida ko'rinadi). Club sahifasidagi zona tabi ("dan X") ham shu `minRegularHourPrice` dan oladi — karta va tab narxi doim bir xil. 
 - 6-qadam: taxminiy yetib borish vaqti (API'siz) — `src/lib/directions.ts`: yo'l = haversine × 1.3; ≤1.5 km piyoda 5 km/soat, aks holda mashinada 25 km/soat.
 - Launch oldi tuzatishlar: mobil tap target'lar ≥44px (filtr chiplari `h-11`, Yaqin|Arzon `min-h-11`, club sahifasidagi Google Maps havolasi `min-h-11`, `.name-pin::before` ko'rinmas bosish maydoni — pin ko'rinishi va transform o'zgarmagan). Joylashuv: ruxsat berilmasa/xato bo'lsa 3.5 soniyalik xabar (`home.locationDenied` / `home.locationError`) — xarita tugmasidan bosilsa desktop'da tugma yonida, mobilda chiplar ostida; "Yaqin"dan bosilsa toggle ostida. Xaritada joylashuv tugmasi pastki o'ng burchakda (mobilda Ro'yxat tugmasi qatorida), zoom pastki chapda (OSM yozuvi ustida). Club sahifasi `params`'ni `<Suspense>` ichida o'qiydi (`ClubSkeleton` fallback) — instant navigatsiya ogohlantirishi yo'q.
+- PWA (o'rnatiladigan sayt): `src/app/manifest.ts` (`/manifest.webmanifest`, start_url `/`), ikonkalar `public/icons/` (192, 512, maskable-512, apple-touch), favicon `src/app/icon.png` + `apple-icon.png`. Service worker/offline/push YO'Q. Ikonkalar `public/brand/logo-source.png` dan `npm run icons` (`scripts/make-icons.mjs`, sharp) bilan qayta yaratiladi — pin niqob qilib ajratiladi, fon `--background`. Fon rangi `THEME_BG` (`src/config.ts`) = globals.css `--background` (`src/lib/theme.test.ts` tekshiradi). `viewportFit: "cover"` + `appleWebApp` black-translucent: body'da `padding-top: env(safe-area-inset-top)` va status bar ostida fon rangli `body::before` chiziq; bosh sahifa sticky/fixed sarlavhasi `top-[env(safe-area-inset-top)]`.
 
 **Muhim fayllar**
 - `src/data/clubs.ts`, `src/data/demo-clubs.ts` — ma'lumot; `src/types/club.ts` — tiplar.
@@ -53,5 +54,5 @@ Gamerlar PC club'larni (specs, narx, joylashuv) bir joyda topadi.
 
 **Keyingi qadam**
 - Xarita tile'lari: CARTO Dark Matter API key talab qiladi; hozir OSM + CSS filtr (vaqtincha). Key olib `MAP_TILES` ni almashtirish.
-- Productionga chiqishdan oldin `NEXT_PUBLIC_SHOW_DEMO` ni qo'ymaslik (demo o'chiq), indekslash uchun `NEXT_PUBLIC_ALLOW_INDEX=true`; favicon hozir create-next-app'niki — almashtirish; 
+- Productionga chiqishdan oldin `NEXT_PUBLIC_SHOW_DEMO` ni qo'ymaslik (demo o'chiq), indekslash uchun `NEXT_PUBLIC_ALLOW_INDEX=true`; 
 - Supabase'ga ko'chirish (faqat `src/lib/data.ts` o'zgaradi); ish vaqti maydoni yo'q — kerak bo'lsa modelga qo'shish.
