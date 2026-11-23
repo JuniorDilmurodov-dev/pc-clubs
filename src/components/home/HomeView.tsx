@@ -26,6 +26,8 @@ const ClubMap = dynamic(() => import("./ClubMap"), {
   loading: () => <div className="size-full bg-background" />,
 });
 
+type LocateSource = "button" | "sort";
+
 const desktopQuery = "(min-width: 1024px)";
 function useIsDesktop(): boolean | null {
   return useSyncExternalStore(
@@ -48,7 +50,9 @@ export default function HomeView({
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [user, setUser] = useState<{ lat: number; lng: number } | null>(null);
   const [locateKey, setLocateKey] = useState(0);
-  const [locateMsg, setLocateMsg] = useState<string | null>(null);
+  // Xabar qayerda ko'rinadi: xaritadagi tugma yonida yoki Yaqin|Arzon ostida
+  const [locateMsg, setLocateMsg] = useState<{ text: string; from: LocateSource } | null>(null);
+  const [locating, setLocating] = useState(false);
   const locateMsgTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [view, setView] = useState<ViewMode>("list");
   // Xarita mobilda birinchi ochilganda mount bo'ladi, keyin yashirin holda saqlanadi
@@ -156,8 +160,8 @@ export default function HomeView({
     return () => clearTimeout(t);
   }, [selectedId]);
 
-  const showLocateMsg = (msg: string) => {
-    setLocateMsg(msg);
+  const showLocateMsg = (text: string, from: LocateSource) => {
+    setLocateMsg({ text, from });
     if (locateMsgTimer.current) clearTimeout(locateMsgTimer.current);
     locateMsgTimer.current = setTimeout(() => setLocateMsg(null), 3500);
   };
@@ -165,18 +169,25 @@ export default function HomeView({
     if (locateMsgTimer.current) clearTimeout(locateMsgTimer.current);
   }, []);
 
-  const locate = () => {
+  // from="sort": joylashuv hali yo'q paytda "Yaqin" bosilgan — ruxsat so'raladi, muvaffaqiyatda Yaqin saralash yoqiladi
+  const locate = (from: LocateSource) => {
     if (!("geolocation" in navigator)) {
-      showLocateMsg(dict.locationError);
+      showLocateMsg(dict.locationError, from);
       return;
     }
+    setLocating(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
+        setLocating(false);
         setLocateMsg(null);
         setUser({ lat: pos.coords.latitude, lng: pos.coords.longitude });
         setLocateKey((k) => k + 1);
+        if (from === "sort") setSortChoice("near");
       },
-      (err) => showLocateMsg(err.code === err.PERMISSION_DENIED ? dict.locationDenied : dict.locationError),
+      (err) => {
+        setLocating(false);
+        showLocateMsg(err.code === err.PERMISSION_DENIED ? dict.locationDenied : dict.locationError, from);
+      },
       { enableHighAccuracy: false, timeout: 8000, maximumAge: 60_000 },
     );
   };
@@ -185,9 +196,17 @@ export default function HomeView({
   const isMap = view === "map";
   const chips = <FilterChips dict={dict} active={active} onToggle={toggle} />;
   const listHeader = (
-    <div className={`items-center justify-between gap-3 px-4 py-2 ${isMap ? "hidden lg:flex" : "flex"}`}>
-      <p className="text-sm font-semibold text-muted">{count}</p>
-      <SortToggle dict={dict} value={sort} nearEnabled={user !== null} onChange={setSortChoice} />
+    <div className={`px-4 py-2 ${isMap ? "hidden lg:block" : ""}`}>
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm font-semibold text-muted">{count}</p>
+        <SortToggle
+          dict={dict} value={sort} nearAvailable={user !== null} locating={locating}
+          onChange={setSortChoice} onRequestNear={() => locate("sort")}
+        />
+      </div>
+      <div role="status" aria-live="polite">
+        {locateMsg?.from === "sort" && <p className="pt-2 text-right text-sm text-amber-200">{locateMsg.text}</p>}
+      </div>
     </div>
   );
   const listEl = (
@@ -224,23 +243,23 @@ export default function HomeView({
         )}
       </div>
 
-      {/* Joylashuv tugmasi (mobilda faqat Xarita rejimida) */}
+      {/* Joylashuv tugmasi — pastki o'ng burchak (mobilda faqat Xarita rejimida, Ro'yxat tugmasi bilan bir qatorda) */}
       <button
         type="button"
-        onClick={locate}
+        onClick={() => locate("button")}
         aria-label={dict.myLocation}
         title={dict.myLocation}
-        className={`absolute right-3 top-3 z-[1000] flex size-12 items-center justify-center rounded-full border border-line bg-surface text-foreground shadow-lg active:bg-surface-2 max-lg:fixed max-lg:left-3 max-lg:right-auto max-lg:top-[132px] ${isMap ? "" : "max-lg:hidden"}`}
+        className={`absolute bottom-3 right-3 z-[1000] flex size-12 items-center justify-center rounded-full border border-line bg-surface text-foreground shadow-lg active:bg-surface-2 max-lg:fixed max-lg:bottom-[calc(env(safe-area-inset-bottom)+16px)] max-lg:z-[1200] ${isMap ? "" : "max-lg:hidden"}`}
       >
         <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
           <circle cx="12" cy="12" r="3" /><circle cx="12" cy="12" r="8" /><path d="M12 1v3M12 20v3M1 12h3M20 12h3" />
         </svg>
       </button>
-      {/* Joylashuv xatosi: tugma yonida qisqa xabar, 3.5 soniyada yo'qoladi */}
+      {/* Joylashuv xatosi: qisqa xabar, 3.5 soniyada yo'qoladi (desktop — tugma yonida, mobil — chiplar ostida, karta ustiga tushmasin) */}
       <div role="status" aria-live="polite" className="contents">
-        {locateMsg && (
-          <p className={`absolute right-[72px] top-4 z-[1000] max-w-72 rounded-lg border border-line bg-surface px-3 py-2 text-sm text-foreground shadow-lg max-lg:fixed max-lg:left-[68px] max-lg:right-3 max-lg:top-[136px] max-lg:max-w-none ${isMap ? "" : "max-lg:hidden"}`}>
-            {locateMsg}
+        {locateMsg?.from === "button" && (
+          <p className={`absolute bottom-4 right-[72px] z-[1000] max-w-72 rounded-lg border border-line bg-surface px-3 py-2 text-sm text-foreground shadow-lg max-lg:fixed max-lg:bottom-auto max-lg:left-3 max-lg:right-14 max-lg:top-[132px] max-lg:z-[1200] max-lg:max-w-none ${isMap ? "" : "max-lg:hidden"}`}>
+            {locateMsg.text}
           </p>
         )}
       </div>

@@ -114,11 +114,14 @@ body {
   font-family: inherit;
 }
 
-/* Mobilda pastni suzuvchi tugma/karta egallaydi — attribution va zoom tepaga, qidiruv+chiplar panelidan pastga */
+/* Zoom pastki chap burchakda, OSM yozuvi ustida (pastki o'ngda joylashuv tugmasi).
+   Mobilda ixcham: tanlangan club kartasi (pastdan 80px) zoom ustiga tushmasin. */
 @media (max-width: 1023px) {
-  .leaflet-bottom.leaflet-right {
-    bottom: auto;
-    top: 128px;
+  .leaflet-bottom.leaflet-left {
+    bottom: env(safe-area-inset-bottom);
+  }
+  .leaflet-bottom.leaflet-left .leaflet-control-zoom {
+    margin-bottom: 2px;
   }
 }
 .no-scrollbar {

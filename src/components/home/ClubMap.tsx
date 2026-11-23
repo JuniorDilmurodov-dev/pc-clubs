@@ -117,7 +117,7 @@ function ClubMapInner({
         className={MAP_TILES.invertToDark ? "tiles-dark" : undefined}
       />
       <AttributionControl position="bottomleft" prefix={false} />
-      <ZoomControl position="bottomright" />
+      <ZoomControl position="bottomleft" />
       <Controller branches={branches} selectedId={selectedId} user={user} locateKey={locateKey} visible={visible} onBackgroundClick={onBackgroundClick} />
       <MarkerClusterGroup
         chunkedLoading

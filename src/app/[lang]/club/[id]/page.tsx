@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import BottomActions from "@/components/club/BottomActions";
 import ClubHero from "@/components/club/ClubHero";
+import ClubSkeleton from "@/components/club/ClubSkeleton";
 import Distance from "@/components/club/Distance";
 import {
   BarIcon, CardIcon, CashIcon, ClockIcon, PinIcon, WalletIcon, WarnIcon,
@@ -51,7 +53,17 @@ const PAYMENT_ICONS: Record<PaymentMethod, typeof CashIcon> = {
   cash: CashIcon, card: CardIcon, payme: WalletIcon, click: WalletIcon, uzum: WalletIcon,
 };
 
-export default async function ClubPage({ params }: PageProps<"/[lang]/club/[id]">) {
+// `params` Suspense ichida o'qiladi: client navigatsiyada umumiy shell darhol (skelet bilan) ko'rinadi,
+// club ma'lumoti esa stream bo'ladi. Aks holda Next "instant-shell-url-data" ogohlantirishini beradi.
+export default function ClubPage({ params }: PageProps<"/[lang]/club/[id]">) {
+  return (
+    <Suspense fallback={<ClubSkeleton />}>
+      <ClubContent params={params} />
+    </Suspense>
+  );
+}
+
+async function ClubContent({ params }: { params: PageProps<"/[lang]/club/[id]">["params"] }) {
   const { lang, id } = await params;
   if (!hasLocale(lang)) notFound();
   const [dict, branch] = await Promise.all([getDictionary(lang), getBranchById(id)]);
