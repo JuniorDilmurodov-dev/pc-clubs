@@ -6,8 +6,8 @@ import { cpuTier } from "@/lib/cpuTier";
 import type { Zone } from "@/types/club";
 
 export type FilterKey = "24h" | "night" | "cs2" | "240hz" | "500hz" | "ps5";
-/** Chiplar tartibi shu. Kalitlar URL'dagi `?f=` qiymatlari bilan bir xil. */
-export const FILTER_KEYS: FilterKey[] = ["24h", "night", "cs2", "240hz", "500hz", "ps5"];
+/** Chiplar tartibi shu (24/7, Hz, qolganlari, CS2 top oxirida). Kalitlar URL'dagi `?f=` qiymatlari bilan bir xil. */
+export const FILTER_KEYS: FilterKey[] = ["24h", "240hz", "500hz", "night", "ps5", "cs2"];
 export const SPEC_KEYS: FilterKey[] = ["cs2", "240hz", "500hz"];
 
 export type SortKey = "near" | "price";

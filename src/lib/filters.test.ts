@@ -89,9 +89,9 @@ describe("sortBranches", () => {
 
 describe("URL", () => {
   it("parseFilters: noto'g'ri kalitlar tashlanadi, tartib chiplar tartibida", () => {
-    expect(parseFilters("500hz,cs2,xxx,CS2")).toEqual(["cs2", "500hz"]);
+    expect(parseFilters("500hz,cs2,xxx,CS2")).toEqual(["500hz", "cs2"]);
     expect(parseFilters(null)).toEqual([]);
-    expect(serializeFilters(set("500hz", "cs2"))).toBe("cs2,500hz");
+    expect(serializeFilters(set("500hz", "cs2"))).toBe("500hz,cs2");
   });
   it("parseSort", () => {
     expect(parseSort("price")).toBe("price");
@@ -114,7 +114,7 @@ describe("havolalar", () => {
   });
 
   it("homeHref: orqaga qaytganda filtrlar URL query'da", () => {
-    expect(homeHref("uz", set("500hz", "cs2"), "price")).toBe("/uz?f=cs2,500hz&sort=price");
+    expect(homeHref("uz", set("500hz", "cs2"), "price")).toBe("/uz?f=500hz,cs2&sort=price");
     expect(homeHref("ru", set("24h"), null)).toBe("/ru?f=24h");
     expect(homeHref("uz", set(), null)).toBe("/uz");
     expect(homeHref("uz", set("cs2"), "price", "map")).toBe("/uz?f=cs2&sort=price&view=map");
