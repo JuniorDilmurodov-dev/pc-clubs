@@ -115,7 +115,7 @@ export default function ZoneSection({
 
         <section aria-label={dict.pricesTitle}>
           {zone.prices.length === 0 ? (
-            <p className="text-muted">{dict.noPrices}</p>
+            <p className="text-muted">{dict.priceUnknown}</p>
           ) : (
             <table className="w-full overflow-hidden rounded-2xl border border-line bg-surface text-left">
               <thead className="text-xs text-muted">

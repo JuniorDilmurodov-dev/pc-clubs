@@ -118,7 +118,7 @@
     "night": "Tungi",
     "bestValue": "Eng foydali",
     "perHourNote": "{price} so'm/soat",
-    "noPrices": "Narxlar hali kiritilmagan",
+    "priceUnknown": "Narxi hali ma'lum emas",
     "noZones": "Zonalar hali kiritilmagan",
     "extraTitle": "Qo'shimcha",
     "paymentsTitle": "To'lov usullari",

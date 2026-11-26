@@ -34,6 +34,10 @@ export interface Branch {
   payments: PaymentMethod[];
   hasBar: boolean;
   verified: boolean;
+  /** Filialning o'z aloqasi (ko'p filialli brendlarda). Bo'sh bo'lsa brendniki ishlatiladi — `branchContacts()`. */
+  phone?: string;
+  telegram?: string;
+  instagram?: string;
   /** true — to'qima demo ma'lumot, haqiqiy club emas */
   isDemo?: boolean;
   /** ISO sana: YYYY-MM-DD */
@@ -63,8 +67,12 @@ export interface Zone {
 
 export interface Price {
   zoneId: string;
-  /** Barqaror kod (masalan "1h", "night"); UI matni hours/timeWindow'dan yasaladi */
+  /**
+   * Barqaror kod: "1h", "1h-day" (kunduzgi chegirma, timeWindow bilan), "3h", "5h", "7h",
+   * "daypack" (kunduzgi paket, timeWindow bilan), "night" (tungi paket). UI matni hours/timeWindow'dan yasaladi.
+   */
   label: string;
+  /** 0 — soatlari noma'lum (faqat tungi paketda) */
   hours: number;
   /** so'm */
   price: number;

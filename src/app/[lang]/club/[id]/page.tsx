@@ -12,7 +12,7 @@ import ZoneSection from "@/components/club/ZoneSection";
 import { FEEDBACK_TELEGRAM } from "@/config";
 import { hasLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
-import { branchTitle, formatDate, formatPrice, localize, telegramUrl, telHref } from "@/lib/branches";
+import { branchContacts, branchTitle, formatDate, formatPrice, localize, telegramUrl, telHref } from "@/lib/branches";
 import { getBranchById, getBranches } from "@/lib/data";
 import { googleRouteUrl, yandexRouteUrl } from "@/lib/directions";
 import { fmt } from "@/lib/i18n-format";
@@ -70,6 +70,7 @@ async function ClubContent({ params }: { params: PageProps<"/[lang]/club/[id]">[
   if (!branch) notFound();
 
   const c = dict.club;
+  const contacts = branchContacts(branch);
   const hours = branch.is24_7 ? dict.common.open24h : branch.hours || null;
   const hasCoords = branch.lat !== null && branch.lng !== null;
   const district = localize(branch.district, lang);
@@ -193,8 +194,8 @@ async function ClubContent({ params }: { params: PageProps<"/[lang]/club/[id]">[
         dict={c}
         googleLabel={dict.branch.googleMaps}
         links={{
-          tel: telHref(branch.brand.phone),
-          telegram: telegramUrl(branch.brand.telegram),
+          tel: telHref(contacts.phone),
+          telegram: telegramUrl(contacts.telegram),
           // Koordinata bo'lsa marshrut (joriy joylashuvdan), bo'lmasa seed'dagi havola
           yandex: hasCoords ? yandexRouteUrl(branch.lat!, branch.lng!) : branch.yandexUrl || null,
           google: hasCoords ? googleRouteUrl(branch.lat!, branch.lng!) : branch.googleUrl || null,

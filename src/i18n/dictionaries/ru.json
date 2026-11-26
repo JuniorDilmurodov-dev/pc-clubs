@@ -118,7 +118,7 @@
     "night": "Ночной",
     "bestValue": "Самый выгодный",
     "perHourNote": "{price} сум/час",
-    "noPrices": "Цены ещё не добавлены",
+    "priceUnknown": "Цена пока неизвестна",
     "noZones": "Зоны ещё не добавлены",
     "extraTitle": "Дополнительно",
     "paymentsTitle": "Способы оплаты",

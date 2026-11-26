@@ -4,7 +4,15 @@ import type { Brand, Localized, PaymentMethod, Price, Zone, Branch } from "@/typ
 
 export const RTX_40_RE = /RTX\s*40\d0/i;
 
-export const isNightPrice = (p: Price) => !!p.timeWindow?.startsWith("00:00");
+/** Tungi paket label bo'yicha aniqlanadi (boshlanish vaqti 22:00/23:00/00:00 yoki noma'lum bo'lishi mumkin). */
+export const isNightPrice = (p: Price) => p.label === "night";
+
+/** Filial aloqasi: filialda bo'lsa o'ziniki, aks holda brendniki. */
+export const branchContacts = (b: Pick<Branch, "phone" | "telegram" | "instagram"> & { brand: Brand }) => ({
+  phone: b.phone || b.brand.phone,
+  telegram: b.telegram || b.brand.telegram,
+  instagram: b.instagram || b.brand.instagram,
+});
 
 export interface BranchView extends Branch {
   brand: Brand;
@@ -19,7 +27,7 @@ export interface BranchView extends Branch {
   totalPcCountApprox: boolean;
   /** Kamida bitta PC zonada RTX 40xx bor */
   hasRtx40: boolean;
-  /** Tungi paket bor (00:00 dan boshlanuvchi timeWindow) */
+  /** Tungi paket bor (label "night") */
   hasNightPackage: boolean;
 }
 
@@ -67,11 +75,11 @@ export const localize = (l: Localized, lang: string): string =>
 
 /**
  * Club kartasidagi "dan X": barcha zonalardagi eng arzon oddiy 1 soatlik narx.
- * Vaqtga bog'liq narxlar (timeWindow: kunduzgi aksiya, tungi paket) hisobga olinmaydi.
+ * Vaqtga bog'liq narxlar (timeWindow: kunduzgi aksiya, tungi paket) va "night" label hisobga olinmaydi.
  * Oddiy 1 soatlik yo'q bo'lsa — oddiy paketlarning narx/soat qiymati; oddiy narx umuman yo'q bo'lsa null.
  */
 export function minRegularHourPrice(prices: Price[]): number | null {
-  const regular = prices.filter((p) => !p.timeWindow && p.hours > 0);
+  const regular = prices.filter((p) => !p.timeWindow && !isNightPrice(p) && p.hours > 0);
   const oneHour = regular.filter((p) => p.hours === 1).map((p) => p.price);
   const list = oneHour.length ? oneHour : regular.map((p) => Math.round(p.price / p.hours));
   return list.length ? Math.min(...list) : null;
@@ -131,7 +139,7 @@ export function bestPriceIndex(prices: Price[]): number {
   return best.i;
 }
 
-/** "@name", "name" yoki to'liq URL -> "https://t.me/name". Bo'sh bo'lsa null. */
+/** "@name", "name", "t.me/..." yoki to'liq URL (masalan "https://t.me/+998...") -> havola. Bo'sh bo'lsa null. */
 export function telegramUrl(handle: string): string | null {
   const h = handle.trim();
   if (!h) return null;
