@@ -79,7 +79,7 @@ async function ClubContent({ params }: { params: PageProps<"/[lang]/club/[id]">[
 
   return (
     <div className="mx-auto w-full max-w-2xl pb-32">
-      <ClubHero lang={lang} dict={c} />
+      <ClubHero lang={lang} dict={c} image={branch.image} alt={branchTitle(branch)} />
 
       <main className="space-y-8 px-4 pt-5">
         <header>

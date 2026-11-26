@@ -31,5 +31,4 @@ export const CashIcon = make(<><rect x="2" y="6" width="20" height="12" rx="2" /
 export const CardIcon = make(<><rect x="2" y="5" width="20" height="14" rx="2" /><path d="M2 10h20M6 15h4" /></>);
 export const WalletIcon = make(<><path d="M3 7a2 2 0 0 1 2-2h13v4" /><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2Z" /><circle cx="16.5" cy="14.5" r="1" /></>);
 export const BarIcon = make(<path d="M5 3h14l-7 9v8m-4 0h8M7 7h10" />);
-export const GamepadIcon = make(<><path d="M6 12h4M8 10v4M15 13h.01M18 11h.01" /><path d="M17.3 6H6.7a4 4 0 0 0-3.9 3.2L2 15a3 3 0 0 0 5.2 2.2L9 15h6l1.8 2.2A3 3 0 0 0 22 15l-.8-5.8A4 4 0 0 0 17.3 6Z" /></>);
 export const WarnIcon = make(<><path d="M12 3 2 21h20L12 3Z" /><path d="M12 10v5M12 18h.01" /></>);

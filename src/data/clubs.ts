@@ -35,6 +35,7 @@ const c1Branches: Branch[] = [
     payments: ["cash", "card", "click", "payme"],
     hasBar: true,
     verified: false,
+    image: "/clubs/bezone.jpg",
     updatedAt: "2026-11-16",
   },
 ];
@@ -149,7 +150,7 @@ const ps = (name: string, prices: P[] = []): ZoneDef => ({ name, type: "ps", pri
 const defs: BranchDef[] = [
   // ---- Bezone: yangi filiallar ----
   {
-    id: "bezone-universam", brandId: "bezone", name: "Universam", district: D.yunusobod,
+    id: "bezone-universam", brandId: "bezone", image: "/clubs/bezone.jpg", name: "Universam", district: D.yunusobod,
     address: { uz: "Amir Temur shoh ko'chasi, 4/2A", ru: "пр-т Амира Темура, 4/2A" },
     lat: 41.366031, lng: 69.285414, yandexUrl: "https://yandex.uz/maps/org/bezone_gaming/54153955954/",
     phone: "+998770970500", telegram: "@bezoneuniversam", instagram: "https://www.instagram.com/bezone.universam/",
@@ -174,7 +175,7 @@ const defs: BranchDef[] = [
   },
   {
     // Manba ~3 yil eski.
-    id: "bezone-alpomish", brandId: "bezone", name: "Alpomish", district: NO_DISTRICT,
+    id: "bezone-alpomish", brandId: "bezone", image: "/clubs/bezone.jpg", name: "Alpomish", district: NO_DISTRICT,
     address: { uz: "Beruniy ko'chasi, 41", ru: "ул. Беруни, 41" },
     lat: 41.344913, lng: 69.205195, yandexUrl: "https://yandex.uz/maps/org/bezone_gaming/84412710599/",
     phone: "+998770950500", instagram: "https://www.instagram.com/bezone.alpomish/",
@@ -191,7 +192,7 @@ const defs: BranchDef[] = [
   },
   {
     // Manba ~2.7 yil eski.
-    id: "bezone-xamza", brandId: "bezone", name: "Xamza", district: D.chilonzor,
+    id: "bezone-xamza", brandId: "bezone", image: "/clubs/bezone.jpg", name: "Xamza", district: D.chilonzor,
     address: { uz: "Bunyodkor shoh ko'chasi, 1A", ru: "пр-т Бунёдкор, 1A" },
     lat: 41.291235, lng: 69.223844, yandexUrl: "https://yandex.uz/maps/org/bezone_gaming/130915122015/",
     phone: "+998951750500", instagram: "https://www.instagram.com/bezone_xamza/",
@@ -210,7 +211,7 @@ const defs: BranchDef[] = [
 
   // ---- MVP Gaming Club (narxlar Yandex'dan, faqat 1 soat) ----
   {
-    id: "mvp-minor", brandId: "mvp", name: "Minor", district: D.yunusobod,
+    id: "mvp-minor", brandId: "mvp", image: "/clubs/mvp.jpg", name: "Minor", district: D.yunusobod,
     address: { uz: "Minor massivi, 116", ru: "массив Минор, 116" },
     lat: 41.330892, lng: 69.282567, yandexUrl: "https://yandex.uz/maps/org/m_v_p_minor/242378564348/",
     phone: "+998957777773", telegram: "https://t.me/mvp_uz",
@@ -229,7 +230,7 @@ const defs: BranchDef[] = [
     ],
   },
   {
-    id: "mvp-badamzar", brandId: "mvp", name: "Badamzar", district: NO_DISTRICT,
+    id: "mvp-badamzar", brandId: "mvp", image: "/clubs/mvp.jpg", name: "Badamzar", district: NO_DISTRICT,
     address: { uz: "Mirzo Ulug'bek ko'chasi, 32", ru: "ул. Мирзо Улугбека, 32" },
     lat: 41.327139, lng: 69.308445, yandexUrl: "https://yandex.uz/maps/org/m_v_p_badamzar/128825208371/",
     phone: "+998950787773", telegram: "https://t.me/mvp_uz2",
@@ -246,7 +247,7 @@ const defs: BranchDef[] = [
     ],
   },
   {
-    id: "mvp-kadysheva", brandId: "mvp", name: "Kadysheva", district: NO_DISTRICT,
+    id: "mvp-kadysheva", brandId: "mvp", image: "/clubs/mvp.jpg", name: "Kadysheva", district: NO_DISTRICT,
     address: { uz: "Aviasozlar 3-tor ko'chasi, 50", ru: "3-й проезд Авиасозлар, 50" },
     lat: 41.284486, lng: 69.34199, yandexUrl: "https://yandex.uz/maps/org/m_v_p_kadysheva/138079584114/",
     phone: "+998997677773", telegram: "https://t.me/mvp_uz3",
@@ -263,7 +264,7 @@ const defs: BranchDef[] = [
 
   // ---- Meta Gaming (manba ~3 yil eski, CPU yo'q) ----
   {
-    id: "meta-main", brandId: "meta", name: "", district: NO_DISTRICT,
+    id: "meta-main", brandId: "meta", image: "/clubs/meta.jpg", name: "", district: NO_DISTRICT,
     address: { uz: "Sayilgoh ko'chasi, 7", ru: "ул. Сайилгох, 7" },
     lat: 41.311407, lng: 69.276157, yandexUrl: "https://yandex.uz/maps/org/meta_gaming/61493942677/",
     hasBar: true, updatedAt: "2026-11-24",
@@ -291,7 +292,7 @@ const defs: BranchDef[] = [
 
   // ---- Fox Gaming (kunduzgi chegirma 08:00–16:00) ----
   {
-    id: "fox-main", brandId: "fox", name: "", district: D.yashnobod,
+    id: "fox-main", brandId: "fox", image: "/clubs/fox.jpg", name: "", district: D.yashnobod,
     address: { uz: "Mavlono Riyozi massivi, 30B", ru: "массив Мавлоно Риёзи, 30Б" },
     lat: 41.314099, lng: 69.325428, yandexUrl: "https://yandex.uz/maps/org/fox_gaming/113657381799/",
     updatedAt: "2026-11-24",
@@ -316,7 +317,7 @@ const defs: BranchDef[] = [
 
   // ---- Yota Premium Game Club (PC soni aniq; tungi paket 22:00–08:00) ----
   {
-    id: "yota-main", brandId: "yota", name: "", district: NO_DISTRICT,
+    id: "yota-main", brandId: "yota", image: "/clubs/yota.jpg", name: "", district: NO_DISTRICT,
     address: { uz: "Istiqbol ko'chasi, 39 («Infinity» TJM)", ru: "ул. Истикбол, 39 (ЖК «Infinity»)" },
     lat: 41.303164, lng: 69.288926, yandexUrl: "https://yandex.uz/maps/org/yota_jeXvbgfg_VA/72238278600/",
     updatedAt: "2026-11-24",
@@ -339,7 +340,7 @@ const defs: BranchDef[] = [
 
   // ---- OctaZone (specs yo'q; tungi paket soatlari noaniq) ----
   {
-    id: "octazone-yunusobod", brandId: "octazone", name: "Yunusobod", district: D.yunusobod,
+    id: "octazone-yunusobod", brandId: "octazone", image: "/clubs/octazone.jpg", name: "Yunusobod", district: D.yunusobod,
     address: { uz: "Amir Temur shoh ko'chasi, 112", ru: "пр-т Амира Темура, 112" },
     lat: 41.351019, lng: 69.288535,
     yandexUrl: "https://yandex.uz/maps/10335/tashkent/house/amir_temur_shoh_ko_chasi_112/YkAYdA9oSkIPQFprfX90cXtnZg==/?ll=69.288535%2C41.351019&z=19.24",
@@ -356,7 +357,7 @@ const defs: BranchDef[] = [
     ],
   },
   {
-    id: "octazone-chilonzor", brandId: "octazone", name: "Chilonzor", district: D.chilonzor,
+    id: "octazone-chilonzor", brandId: "octazone", image: "/clubs/octazone.jpg", name: "Chilonzor", district: D.chilonzor,
     address: { uz: "Sobiq «Parlament» binosi", ru: "бывшее здание «Парламент»" },
     lat: 41.272299, lng: 69.193413,
     yandexUrl: "https://yandex.uz/maps/10335/tashkent/?ll=69.193199%2C41.272149&mode=poi&poi%5Bpoint%5D=69.193413%2C41.272299&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D150919219960&z=19.38",
@@ -374,7 +375,7 @@ const defs: BranchDef[] = [
 
   // ---- Cyber Front Gaming (kunduzgi chegirma 09:00–18:00, CPU yo'q) ----
   {
-    id: "cyberfront-main", brandId: "cyberfront", name: "", district: D.uchtepa,
+    id: "cyberfront-main", brandId: "cyberfront", image: "/clubs/cyberfront.jpg", name: "", district: D.uchtepa,
     address: { uz: "Kichik halqa yo'li, 25", ru: "Малая кольцевая дорога, 25" },
     lat: 41.283456, lng: 69.193364, yandexUrl: "https://yandex.uz/maps/org/cyber_front_gaming/76547533857/",
     hasBar: true, updatedAt: "2026-11-26",
@@ -391,7 +392,7 @@ const defs: BranchDef[] = [
   // ---- XCORE ----
   {
     // Narx yo'q (hamma zonada). Periferiya faqat ZOWIE Zone'da.
-    id: "xcore-yunusobod", brandId: "xcore", name: "Yunusobod", district: D.yunusobod,
+    id: "xcore-yunusobod", brandId: "xcore", image: "/clubs/xcore.jpg", name: "Yunusobod", district: D.yunusobod,
     address: { uz: "Yunusota ko'chasi, 6B", ru: "ул. Юнусата, 6Б" },
     lat: 41.374754, lng: 69.305266, yandexUrl: "https://yandex.uz/maps/org/xcore/88850173595/",
     payments: ["cash", "card"], updatedAt: "2026-11-26",
@@ -410,7 +411,7 @@ const defs: BranchDef[] = [
   },
   {
     // 24/7 emas, ish vaqti noma'lum. "1h" — kechki 17:00–09:00 narxi (oddiy narx); "1h-day"/"daypack" 09:00–17:00.
-    id: "xcore-parkent", brandId: "xcore", name: "Parkent", district: NO_DISTRICT,
+    id: "xcore-parkent", brandId: "xcore", image: "/clubs/xcore.jpg", name: "Parkent", district: NO_DISTRICT,
     address: { uz: "Parkent ko'chasi, 201A", ru: "ул. Паркентская, 201А" },
     lat: 41.311944, lng: 69.333438, yandexUrl: "https://yandex.uz/maps/org/x_core_parkentskiy/70899410988/",
     is24_7: false, hours: "",

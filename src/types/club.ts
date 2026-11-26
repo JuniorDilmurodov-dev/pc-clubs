@@ -38,6 +38,8 @@ export interface Branch {
   phone?: string;
   telegram?: string;
   instagram?: string;
+  /** Club rasmi: `public/clubs/` dagi fayl yo'li, masalan "/clubs/bezone.jpg". Bo'sh bo'lsa placeholder. */
+  image?: string;
   /** ISO sana: YYYY-MM-DD */
   updatedAt: string;
 }
