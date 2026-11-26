@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { SHOW_DEMO } from "@/config";
 import { distanceKm, filterBranches, type BranchView } from "@/lib/branches";
 import {
   applyFilters, cardPrice, parseFilters, parseSort, parseView, serializeFilters, sortBranches,
@@ -14,7 +13,6 @@ import { readHomeSession, writeHomeSession } from "@/lib/session-state";
 import type { Locale } from "@/i18n/config";
 import BranchList from "./BranchList";
 import ClubCard from "./ClubCard";
-import DemoBanner from "./DemoBanner";
 import FilterChips from "./FilterChips";
 import LangSwitcher from "./LangSwitcher";
 import SearchBar from "./SearchBar";
@@ -226,11 +224,6 @@ export default function HomeView({
 
   return (
     <div className="flex min-h-[calc(100dvh-env(safe-area-inset-top))] w-full flex-col lg:h-[calc(100dvh-env(safe-area-inset-top))] lg:min-h-0">
-    {SHOW_DEMO && (
-      <div className={isMap ? "max-lg:hidden" : undefined}>
-        <DemoBanner text={dict.demoBanner} badge={dict.demo} closeLabel={dict.demoBannerClose} />
-      </div>
-    )}
     <div className="relative w-full flex-1 lg:min-h-0 lg:overflow-hidden">
       {/* Xarita: desktop'da doim, mobilda faqat Xarita rejimida (aks holda yashirin saqlanadi) */}
       <div className={`absolute inset-0 lg:left-[420px] ${isMap ? "max-lg:fixed" : "max-lg:hidden"}`}>

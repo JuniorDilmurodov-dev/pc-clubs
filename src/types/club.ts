@@ -38,8 +38,6 @@ export interface Branch {
   phone?: string;
   telegram?: string;
   instagram?: string;
-  /** true — to'qima demo ma'lumot, haqiqiy club emas */
-  isDemo?: boolean;
   /** ISO sana: YYYY-MM-DD */
   updatedAt: string;
 }

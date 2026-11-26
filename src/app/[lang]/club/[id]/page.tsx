@@ -43,9 +43,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/club/[id]"
   return {
     title: fmt(c.metaTitle, { name, place }),
     description,
-    // To'qima demo club'lar hech qachon qidiruvga tushmasin. Haqiqiy club'da kalit umuman qaytarilmaydi —
-    // layout'dagi qiymat (ALLOW_INDEX bo'yicha noindex/index) meros bo'lib qoladi; `undefined` uni o'chirib yuborardi.
-    ...(b.isDemo ? { robots: { index: false, follow: false } } : {}),
+    // `robots` qaytarilmaydi — layout'dagi qiymat (ALLOW_INDEX bo'yicha) meros bo'lib qoladi; `undefined` uni o'chirib yuborardi.
   };
 }
 
@@ -81,7 +79,7 @@ async function ClubContent({ params }: { params: PageProps<"/[lang]/club/[id]">[
 
   return (
     <div className="mx-auto w-full max-w-2xl pb-32">
-      <ClubHero lang={lang} dict={c} isDemo={!!branch.isDemo} />
+      <ClubHero lang={lang} dict={c} />
 
       <main className="space-y-8 px-4 pt-5">
         <header>
@@ -125,7 +123,7 @@ async function ClubContent({ params }: { params: PageProps<"/[lang]/club/[id]">[
           {!branch.verified && (
             <p className="mt-4 flex items-start gap-2 rounded-xl border border-amber-400/40 bg-amber-400/10 px-3 py-2 text-sm text-amber-200">
               <WarnIcon className="mt-0.5 size-4 shrink-0" />
-              {branch.isDemo ? c.demoNotice : c.unverified}
+              {c.unverified}
             </p>
           )}
         </header>

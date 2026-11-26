@@ -1,11 +1,7 @@
-import { SHOW_DEMO } from "@/config";
 import {
   branches as realBranches, brands as realBrands,
   prices as realPrices, zones as realZones,
 } from "@/data/clubs";
-import {
-  demoBranches, demoBrands, demoPrices, demoZones,
-} from "@/data/demo-clubs";
 import {
   filterBranches, isNightPrice, minRegularHourPrice, RTX_40_RE,
   type BranchFilters, type BranchView,
@@ -25,10 +21,10 @@ const GPU_ORDER = [
 
 const gpuRank = (gpu: string) => GPU_ORDER.indexOf(gpu.trim().toLowerCase());
 
-const allBrands = () => (SHOW_DEMO ? [...realBrands, ...demoBrands] : realBrands);
-const allBranches = () => (SHOW_DEMO ? [...realBranches, ...demoBranches] : realBranches);
-const allZones = () => (SHOW_DEMO ? [...realZones, ...demoZones] : realZones);
-const allPrices = () => (SHOW_DEMO ? [...realPrices, ...demoPrices] : realPrices);
+const allBrands = () => realBrands;
+const allBranches = () => realBranches;
+const allZones = () => realZones;
+const allPrices = () => realPrices;
 
 function build(branch: Branch): BranchView {
   const brand = allBrands().find((b) => b.id === branch.brandId);

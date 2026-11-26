@@ -1,6 +1,3 @@
-/** NEXT_PUBLIC_SHOW_DEMO="true" bo'lsagina to'qima demo club'lar ko'rinadi (default: false). */
-export const SHOW_DEMO = process.env.NEXT_PUBLIC_SHOW_DEMO === "true";
-
 /** NEXT_PUBLIC_ALLOW_INDEX="true" bo'lsagina qidiruv tizimlari indekslaydi (default: false). */
 export const ALLOW_INDEX = process.env.NEXT_PUBLIC_ALLOW_INDEX === "true";
 

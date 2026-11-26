@@ -3,7 +3,7 @@ import { BackIcon, GamepadIcon } from "./Icons";
 import type { ClubDict } from "./types";
 
 // Rasm hali yo'q — chiroyli placeholder. Keyin <Image> bilan almashtiriladi.
-export default function ClubHero({ lang, dict, isDemo }: { lang: string; dict: ClubDict; isDemo: boolean }) {
+export default function ClubHero({ lang, dict }: { lang: string; dict: ClubDict }) {
   return (
     <div className="relative aspect-[16/9] w-full overflow-hidden bg-surface sm:rounded-b-3xl">
       <div
@@ -36,11 +36,6 @@ export default function ClubHero({ lang, dict, isDemo }: { lang: string; dict: C
         <BackIcon className="size-5" />
         {dict.back}
       </BackLink>
-      {isDemo && (
-        <span className="absolute right-3 top-3 rounded-md bg-amber-400 px-2 py-1 text-xs font-extrabold uppercase tracking-wide text-black">
-          {dict.demo}
-        </span>
-      )}
     </div>
   );
 }

@@ -86,17 +86,6 @@ body::before {
   transform: translateX(-50%) rotate(45deg) scale(0.9);
   border-bottom-right-radius: 2px;
 }
-/* To'qima demo club pini: xira, kulrang chegara. Haqiqiy club pinlari yorqin qoladi */
-.name-pin.is-demo {
-  background: #141821;
-  color: #a3acc0;
-  border-color: #4a5266;
-  opacity: 0.75;
-  box-shadow: none;
-}
-.name-pin.is-demo::after {
-  border-color: #4a5266;
-}
 .name-pin.is-selected {
   transform: translate(-50%, calc(-100% - 9px)) scale(1.3);
   transform-origin: 50% 100%;

@@ -48,15 +48,8 @@ export default function ClubCard({
             </svg>
           )}
         </div>
-        {(b.isDemo || address) && (
-          <p className="mt-1 flex items-center gap-1.5 text-sm text-muted">
-            {b.isDemo && (
-              <span className="shrink-0 rounded bg-amber-400 px-1.5 py-0.5 text-[11px] font-extrabold uppercase leading-none tracking-wide text-black">
-                {dict.demo}
-              </span>
-            )}
-            {address && <span className="min-w-0 truncate">{address}</span>}
-          </p>
+        {address && (
+          <p className="mt-1 truncate text-sm text-muted">{address}</p>
         )}
         {showMeta && (
           <p className="mt-1 flex items-center gap-2 text-sm text-muted">
