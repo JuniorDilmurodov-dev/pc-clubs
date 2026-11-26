@@ -49,16 +49,67 @@ async function render(size, scale, out, bg) {
   console.log(`${out} (${size}×${size})`);
 }
 
+// Belgi niqobi: plitka ichki qismidan (chetdagi glow'siz) yashil kanal bo'yicha alpha.
+const GLYPH_RGB = { r: 180, g: 252, b: 20 };
+const glyphMask = await (async () => {
+  const inset = Math.round(side * 0.1);
+  const inner = sharp(trimmed.data).extract({
+    left: inset,
+    top: inset,
+    width: trimmed.info.width - 2 * inset,
+    height: trimmed.info.height - 2 * inset,
+  });
+  const { data, info } = await inner.raw().toBuffer({ resolveWithObject: true });
+  const ch = info.channels;
+  const a = Buffer.alloc(info.width * info.height);
+  for (let i = 0; i < a.length; i++) {
+    const g = data[i * ch + 1];
+    a[i] = Math.max(0, Math.min(255, Math.round(((g - 100) / (210 - 100)) * 255)));
+  }
+  // Belgi chegarasigacha kesish
+  return sharp(a, { raw: { width: info.width, height: info.height, channels: 1 } })
+    .trim({ background: "#000000", threshold: 10 })
+    .png()
+    .toBuffer({ resolveWithObject: true });
+})();
+
+/** Butun maydonli ikonka: radial fon + markazda belgi (balandligi glyphH·size). */
+async function renderGlyph(size, glyphH, out) {
+  const h = Math.round(size * glyphH);
+  const w = Math.round((glyphMask.info.width / glyphMask.info.height) * h);
+  const mask = await sharp(glyphMask.data).resize(w, h, { kernel: "lanczos3" }).toColourspace("b-w").raw().toBuffer();
+  const rgba = Buffer.alloc(w * h * 4);
+  for (let i = 0; i < w * h; i++) {
+    rgba[i * 4] = GLYPH_RGB.r;
+    rgba[i * 4 + 1] = GLYPH_RGB.g;
+    rgba[i * 4 + 2] = GLYPH_RGB.b;
+    rgba[i * 4 + 3] = mask[i];
+  }
+  const glyph = await sharp(rgba, { raw: { width: w, height: h, channels: 4 } }).png().toBuffer();
+  const bgSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
+    <defs><radialGradient id="g" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="#050b05"/><stop offset="65%" stop-color="#08140a"/><stop offset="100%" stop-color="#1c3a08"/>
+    </radialGradient></defs><rect width="100%" height="100%" fill="url(#g)"/></svg>`;
+  await sharp(Buffer.from(bgSvg))
+    .composite([{ input: glyph, left: Math.round((size - w) / 2), top: Math.round((size - h) / 2) }])
+    .flatten({ background: BG })
+    .png({ compressionLevel: 9 })
+    .toFile(path.join(root, out));
+  console.log(`${out} (${size}×${size}, belgi)`);
+}
+
 await mkdir(path.join(root, "public/icons"), { recursive: true });
 
 // "any": shaffof fon, plitka butun maydon
 await render(192, 1, "public/icons/icon-192.png");
 await render(512, 1, "public/icons/icon-512.png");
-// maskable: plitka markaziy 80% xavfsiz doira (radius 0.4·size) ichida bo'lishi kerak.
-// Plitka burchak radiusi ≈ 0.2·tomon; 0.6 masshtabda eng chetki nuqta ≈ 0.399·size ≤ 0.4·size.
-await render(512, 0.6, "public/icons/maskable-512.png", BG);
-// iOS: shaffoflik yo'q, burchaklarni o'zi yumaloqlaydi
-await render(180, 0.86, "public/icons/apple-touch-icon.png", BG);
-await render(180, 0.86, "src/app/apple-icon.png", BG);
+// maskable / apple-touch: OS ikonkani o'zi niqoblaydi/yumaloqlaydi. Plitkani fon ustiga qo'ysak
+// "ramka ichida ramka" chiqadi — shuning uchun faqat belgi (pin + geympad) olinib,
+// butun maydonni to'ldiruvchi qorong'i-yashil radial fon ustiga qo'yiladi.
+// maskable: xavfsiz doira radiusi 0.4·size; belgi balandligi 0.6 da chetki nuqtalar ≈ 0.37·size.
+await renderGlyph(512, 0.6, "public/icons/maskable-512.png");
+// iOS: burchaklarni o'zi yumaloqlaydi (~22%)
+await renderGlyph(180, 0.64, "public/icons/apple-touch-icon.png");
+await renderGlyph(180, 0.64, "src/app/apple-icon.png");
 // Next.js favicon (kichik — plitka butun maydon)
 await render(48, 1, "src/app/icon.png");
